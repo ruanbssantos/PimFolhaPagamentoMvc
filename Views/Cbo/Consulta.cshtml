@@ -1,0 +1,123 @@
+﻿<div class="container-fluid px-4 mt-4 mb-4">
+    <div class="row justify-content-between">
+        <div class="col-auto">
+            <div class="row h-100 no-gutters align-items-center">
+                <div class="col-12">
+                    <h3>@ViewData["Title"]</h3>
+                </div>
+            </div>
+        </div>
+        <div class="col-auto d-flex align-items-center">
+            <div class="row">
+                <div class="col-auto">
+                    <div class="btn-group">
+                        <button type="button" class="btn-acesso-rapido btn_novo" data-bs-custom-class="custom-tooltip" data-bs-toggle="tooltip" data-bs-placement="left" data-bs-title="Novo">
+                            <i class="fa-solid fa-plus"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container-fluid px-4" id="containerBody">
+    <div class="row">
+        <div class="col-12">
+            <div class="container-formulario shadow p-3 p-md-4">
+                <div class="row">
+                    <div class="col-12 mb-4">
+                        <div class="card">
+                            <div class="card-header text-white bg-dark-secundary">
+                                <label class="sub-titulo-form">Filtros</label>
+                            </div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-12 col-sm-12 col-lg-auto">
+                                        <div class="form-group">
+                                            <label for="txt_codigoCbo">CBO</label>
+                                            <input type="text" class="form-control" name="txt_codigoCbo" id="txt_codigoCbo" maxlength="10" />
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-sm-12 col-lg">
+                                        <div class="form-group">
+                                            <label for="txt_cbo">Título</label>
+                                            <input type="text" class="form-control" name="txt_titulo" id="txt_titulo" maxlength="10" />
+                                        </div>
+                                    </div> 
+                                    <div class="col-12 my-4 text-center">
+                                        <input type="button" class="btn btn-success" name="btn_buscar" id="btn_buscar" value="Buscar" title="Buscar">
+                                        @*<input type="button" class="btn btn-secondary" name="btn_voltar" id="btn_voltar" value="Voltar" title="Voltar" />*@
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-header text-white bg-dark-secundary">
+                                <label class="sub-titulo-form">Resultado</label>
+                            </div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-12">
+                                        <div class="d-inline-flex align-items-center form-group">
+                                            <select class="form-select cmb_qtdPaginacao" name="cmb_qtdRegistro" id="cmb_qtdRegistro">
+                                                <option value="10">10</option>
+                                                <option value="25">25</option>
+                                                <option value="50">50</option>
+                                                <option value="100">100</option>
+                                            </select>
+                                            &nbsp;resultados por página
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-12">
+                                        <div class="table-responsive-xl" id="tb_busca">
+                                            <table class="table table-striped border-table">
+                                                <thead>
+                                                    <tr>
+                                                        <th>#</th> 
+                                                        <th>CBO</th>
+                                                        <th>Título</th>
+                                                        <th></th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody></tbody>
+                                                <tfoot>
+                                                    <tr>
+                                                        <td colspan="100%">
+                                                            <div class="row align-items-center">
+                                                                <div class="col-6 menssagem text-align-left"></div>
+                                                                <div class="col-6 paginacao text-right"></div>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                </tfoot>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<script>
+
+    $(document).ready(function () {
+
+        $('.btn_novo').on('click', function () { window.open('Cadastro', '_self'); });
+
+        dados = []
+
+        fcn_gera_paginacao('#tb_busca', 0, 0, $('#cmb_qtdRegistro').val(), dados, 1)
+        
+    });
+</script>

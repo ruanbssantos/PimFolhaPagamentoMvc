@@ -1,0 +1,149 @@
+﻿
+<style>
+    table {
+        border-collapse: collapse; /* Combinação de bordas */
+        width: 100%;
+        border: 1px solid #e3e6f0;
+    }
+
+
+    th,td {
+        border: 1px solid var(--color-padrao-lite2)!important;
+        padding: 3px !important;
+        text-align: center;
+        vertical-align: middle!important;
+    }
+
+</style>
+<div class="container-fluid px-4 mt-4 mb-4">
+    <div class="row justify-content-between">
+        <div class="col-auto">
+            <div class="row h-100 no-gutters align-items-center">
+                <div class="col-12">
+                    <h3>@ViewData["Title"]</h3>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container-fluid px-4" id="containerBody">
+    <div class="row">
+        <div class="col-12">
+            <div class="container-formulario shadow p-3 p-md-4">
+                <div class="row">
+                    <div class="col-12 mb-4">
+                        <div class="card">
+                            <div class="card-header text-white bg-dark-secundary">
+                                <label class="sub-titulo-form">Filtros</label>
+                            </div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-12 col-sm-12 col-lg-12 col-xl-6 col-xxl-12">
+                                        <div class="form-group">
+                                            <label for="txt_empresa">Empresa</label>
+                                            <input type="text" class="form-control obg field_autoBusca" name="txt_empresa" id="txt_empresa" data-field_type="Field_Cbo" />
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-sm-12 col-lg-12 col-xl-6 col-xxl">
+                                        <div class="form-group">
+                                            <label for="txt_funcionario">Funcionário</label>
+                                            <input type="text" class="form-control obg field_autoBusca" name="txt_funcionario" id="txt_funcionario" data-field_type="Field_Cbo" />
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-sm-12 col-lg-12 col-xl-6 col-xxl-auto">
+                                        <div class="form-group">
+                                            <label for="cmb_mes">Mês</label>
+                                            <select class="form-select obg" name="cmb_mes" id="cmb_mes">
+                                                <option value="">Selecione</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-sm-12 col-lg-12 col-xl-6 col-xxl-auto">
+                                        <div class="form-group">
+                                            <label for="cmb_ano">Ano</label>
+                                            <select class="form-select obg" name="cmb_ano" id="cmb_ano">
+                                                <option value="">Selecione</option>
+                                            </select>
+                                        </div>
+                                    </div> 
+                                </div>
+                                <div class="row">
+                                    <div class="col-12 my-4 text-center">
+                                        <input type="button" class="btn btn-success" name="btn_buscar" id="btn_buscar" value="Buscar" title="Buscar">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-header text-white bg-dark-secundary">
+                                <label class="sub-titulo-form">Resultado</label>
+                            </div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-12">
+                                        <div class="table-responsive-xl" id="tb_busca">
+                                            <table class="table table-striped border-table">
+                                                <thead>
+                                                    <tr>
+                                                        <th rowspan="2">Dia mes</th>
+                                                        <th rowspan="2">Entrada</th>
+                                                        <th colspan="2">Almoço</th>
+                                                        <th rowspan="2">Saída</th> 
+                                                        <th rowspan="2"></th> 
+                                                    </tr>
+                                                    <tr>
+                                                        <th>Saída</th>
+                                                        <th>Retorno</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+ 
+                                                    @for (int i = 1; i <= 31; i++)
+                                                    {
+                                                        <tr>
+                                                            <td>
+                                                                @i
+                                                            </td>
+                                                            <td>
+                                                                <input class="form-control" />
+                                                            </td>
+                                                            <td>
+                                                                <input class="form-control" />
+                                                            </td>
+                                                            <td>
+                                                                <input class="form-control" />
+                                                            </td>
+                                                            <td>
+                                                                <input class="form-control" />
+                                                            </td>
+                                                            <td class="text-center">
+                                                                <button type="button" class="btn btn-outline-success btn-sm" title="Alterar">
+                                                                    <i class="fa-solid fa-square-check"></i>
+                                                                </button>
+                                                            </td>
+                                                        </tr>
+                                                    }
+
+                                                    
+                                                </tbody> 
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<script>
+
+    $(document).ready(function () {});
+</script>

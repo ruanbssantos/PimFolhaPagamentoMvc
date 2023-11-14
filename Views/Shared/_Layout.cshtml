@@ -1,0 +1,342 @@
+﻿@* <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - PimFolhaPagamentoV2</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/PimFolhaPagamentoV2.styles.css" asp-append-version="true" />
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+            <div class="container-fluid">
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">PimFolhaPagamentoV2</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                    <ul class="navbar-nav flex-grow-1">
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <div class="container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    <footer class="border-top footer text-muted">
+        <div class="container">
+            &copy; 2023 - PimFolhaPagamentoV2 - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+        </div>
+    </footer>
+
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+
+
+
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html> *@
+
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    @await Html.PartialAsync("_HeadContent")
+</head>
+<body class="sb-nav-fixed">
+    <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark shadow-lg" id="menuTopo">
+        <a class="navbar-brand d-flex justify-content-center align-items-center" href="~/Home/Index" style="margin-right: -1.2px ">
+            @*<i class="fa-solid fa-crown fas-2x" style="color:#BDA14E!important"></i> King's Solutions*@
+            <img src="~/_images/png/logo-semFundo.png" style="height:50px" />
+        </a>
+        <div class="divisor-logo-topo"></div>
+        <!-- Sidebar Toggle-->
+        <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle" href="#!"><i class="fas fa-bars"></i></button>
+        <!-- Navbar-->
+        <ul class="navbar-nav ms-auto me-0 me-md-3 my-2 my-md-0">
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-user fa-fw"></i></a>
+
+                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                    <li><a class="dropdown-item" href="#!">Settings</a></li>
+                    <li><a class="dropdown-item" href="#!">Activity Log</a></li>
+                    <li><hr class="dropdown-divider" /></li>
+                    <li><a class="dropdown-item" href="#!">Logout</a></li>
+                </ul>
+            </li>
+        </ul>
+    </nav>
+    <div id="layoutSidenav">
+        <div class="container-modalGenerico"></div>
+        <div id="div_templateModalGenerica">
+            <div class="modal fade modalGenerica" id="[id]" aria-hidden="true" tabindex="-1">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Modal title</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal">
+                                <i class="fa-solid fa-circle-xmark" style="font-size:20px"></i>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="container-fluid corpoModalGenerica">
+                                Modal body text goes here.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script type="text/javascript">
+
+            const templateModalGenerica = $('#div_templateModalGenerica').html();
+
+            function fcn_criaModalGenerica() {
+
+                var id_modal = 'modalGenerica_' + ($('.container-modalGenerico .modalGenerica').length + 1);
+                var layout = templateModalGenerica.replaceAll('[id]', id_modal);
+
+                $('.container-modalGenerico').append(layout);
+
+                $('#' + id_modal).on('hidden.bs.modal', function (e) {
+                    $('#' + id_modal).remove();
+                });
+                return $('#' + id_modal);
+            }
+
+        </script>
+
+        <div id="layoutSidenav_nav">
+            <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
+                <div class="sb-sidenav-menu">
+                    <div class="nav">
+                        <a class="nav-item" href="~/Home/Index">
+                            <i class="fa-solid fa-house me-2"></i>
+                            Home
+                        </a>
+                        <hr class="sidebar-divider">
+                        <a class="nav-item" href="~/Empresa/Consulta">
+                            <i class="fa-solid fa-building me-2"></i>
+                            Empresa
+                        </a>
+                        <hr class="sidebar-divider" />
+                        <a class="nav-item" href="~/Cbo/Consulta">
+                            <i class="fa-solid fa-rectangle-list me-2"></i>
+                            CBO
+                        </a>
+                        <hr class="sidebar-divider" />
+                        <a class="nav-item" href="~/Funcionario/Consulta">
+                            <i class="fa-solid fa-user me-2"></i>
+                            Funcionário
+                        </a>
+                        <hr class="sidebar-divider" />
+                        <a class="nav-item" href="~/FolhaPonto/Consulta">
+                            <i class="fa-solid fa-clock me-2"></i>
+                            Folha de Ponto
+                        </a>
+                        <hr class="sidebar-divider" />
+                        <a class="nav-item" href="~/Holerite/Consulta">
+                            <i class="fa-solid fa-file-invoice-dollar  me-2"></i>
+                            Holerite
+                        </a>
+                        <hr class="sidebar-divider" />
+
+                    </div>
+                </div>
+                <div class="sb-sidenav-footer text-center">
+                    <i class="fa-solid fa-crown fas-2x" style="color:#BDA14E!important"></i>
+                    <div class="small">king’s Solutions Corp</div>
+                </div>
+            </nav>
+        </div>
+        <div id="layoutSidenav_content">
+            <main>
+                <div class="container-fluid px-4">
+                    <ol class="breadcrumb mb-4">
+                        @*@foreach (var item in ViewBag.Breadcrumb)
+                            {
+                                <li class="breadcrumb-item">
+                                    @if (item.Url == null)
+                                    {
+                                        <span>@item.Title</span>
+                                    }
+                                    else
+                                    {
+                                        <a href="@item.Url">@item.Title</a>
+                                    }
+                                </li>
+                            }*@
+                    </ol>
+                </div>
+                @RenderBody()
+            </main>
+            <footer class="py-4 bg-light mt-auto">
+                <div class="container-fluid px-4">
+                    <div class="d-flex align-items-center justify-content-between small">
+                        <div class="text-muted">Copyright &copy; king’s Solutions Corp Website 2023</div>
+                        <div>
+                            <a href="#" data-bs-target="#modalPoliticaPrivacidade" data-bs-toggle="modal">Política de Privacidade e Termos de Uso</a>
+                        </div>
+                    </div>
+                </div>
+            </footer>
+        </div>
+    </div>
+    <div class="modal fade" id="modalPoliticaPrivacidade" aria-hidden="true" tabindex="-1">
+        <div class="modal-dialog modal-xl modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Política de Privacidade e Termos de Uso</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal">
+                        <i class="fa-solid fa-circle-xmark" style="font-size:20px"></i>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="container-fluid corpoModalGenerica">
+                        <div class="row">
+                            <div class="col-12">
+                                <p style="margin-left:0px;">
+                                    <strong>Política de Privacidade e Termos de Uso</strong>
+                                </p>
+                                <p style="margin-left:0px;">
+                                    <strong>Última atualização: 28/10/2023</strong>
+                                </p>
+                                <p style="margin-left:0px;">
+                                    Bem-vindo ao site administrativo de folha de pagamento da King's Solutions Corp. Esta página descreve as políticas de privacidade e os termos de uso para o nosso site. É importante que você leia e compreenda completamente essas políticas antes de usar nossos serviços.
+                                </p>
+                                <p style="margin-left:0px;">
+                                    <strong>1. Coleta de Dados Pessoais</strong>
+                                </p>
+                                <p style="margin-left:0px;">
+                                    <strong>1.1. Dados Coletados</strong>
+                                </p>
+                                <p style="margin-left:0px;">
+                                    Na King's Solutions Corp, coletamos as seguintes categorias de dados pessoais, em conformidade com a Lei Geral de Proteção de Dados (LGPD) e outras leis aplicáveis:
+                                </p>
+                                <ul>
+                                    <li>
+                                        Informações de identificação, como nome, endereço, e-mail e número de telefone.
+                                    </li>
+                                    <li>
+                                        Informações financeiras, como número de conta bancária.
+                                    </li>
+                                    <li>
+                                        Informações de emprego, como cargo, salário e histórico profissional.
+                                    </li>
+                                    <li>
+                                        Informações fiscais, como número de CPF.
+                                    </li>
+                                    <li>
+                                        Informações de login e autenticação para acesso ao sistema.
+                                    </li>
+                                </ul>
+                                <p style="margin-left:0px;">
+                                    <strong>1.2. Uso dos Dados Pessoais</strong>
+                                </p>
+                                <p style="margin-left:0px;">
+                                    Utilizamos seus dados pessoais para:
+                                </p>
+                                <ul>
+                                    <li>
+                                        Fornecer acesso aos nossos serviços de folha de pagamento.
+                                    </li>
+                                    <li>
+                                        Realizar cálculos de pagamento e processamento de salários.
+                                    </li>
+                                    <li>
+                                        Cumprir obrigações legais relacionadas à folha de pagamento e fiscalização.
+                                    </li>
+                                    <li>
+                                        Melhorar nossos serviços e atender às necessidades dos usuários.
+                                    </li>
+                                    <li>
+                                        Comunicar informações importantes, como atualizações do sistema ou alterações nos termos de uso e política de privacidade.
+                                    </li>
+                                </ul>
+                                <p style="margin-left:0px;">
+                                    <strong>1.3. Compartilhamento de Dados Pessoais</strong>
+                                </p>
+                                <p style="margin-left:0px;">
+                                    Na King's Solutions Corp, podemos compartilhar seus dados pessoais com terceiros, como parceiros de processamento de pagamento, autoridades fiscais e regulatórias, de acordo com a LGPD e outras leis aplicáveis. No entanto, nós não vendemos ou compartilhamos seus dados pessoais com terceiros para fins de marketing direto.
+                                </p>
+                                <p style="margin-left:0px;">
+                                    <strong>2. Segurança de Dados</strong>
+                                </p>
+                                <p style="margin-left:0px;">
+                                    Estamos comprometidos em proteger seus dados pessoais. Utilizamos medidas técnicas e organizacionais para garantir a segurança dos dados, protegendo-os contra perda, acesso não autorizado, alteração ou divulgação.
+                                </p>
+                                <p style="margin-left:0px;">
+                                    <strong>3. Acesso e Controle de Dados</strong>
+                                </p>
+                                <p style="margin-left:0px;">
+                                    Você tem o direito de acessar, corrigir e excluir seus dados pessoais. Para exercer esses direitos ou fazer perguntas sobre como seus dados são tratados, entre em contato conosco pelo endereço de e-mail [inserir endereço de e-mail de contato].
+                                </p>
+                                <p style="margin-left:0px;">
+                                    <strong>4. Cookies e Tecnologias de Rastreamento</strong>
+                                </p>
+                                <p style="margin-left:0px;">
+                                    Nosso site utiliza cookies e tecnologias de rastreamento para melhorar a experiência do usuário. Para obter informações detalhadas sobre o uso de cookies e como gerenciá-los, consulte nossa Política de Cookies.
+                                </p>
+                                <p style="margin-left:0px;">
+                                    <strong>5. Consentimento</strong>
+                                </p>
+                                <p style="margin-left:0px;">
+                                    Ao usar nosso site, você consente com a coleta e o processamento de seus dados pessoais de acordo com esta política de privacidade.
+                                </p>
+                                <p style="margin-left:0px;">
+                                    <strong>6. Alterações na Política de Privacidade e Termos de Uso</strong>
+                                </p>
+                                <p style="margin-left:0px;">
+                                    Podemos atualizar esta política periodicamente para refletir mudanças em nossas práticas de privacidade. Quaisquer alterações significativas serão comunicadas a você. É importante revisar regularmente esta política de privacidade.
+                                </p>
+                                <p style="margin-left:0px;">
+                                    <strong>7. Jurisdição e Leis Aplicáveis</strong>
+                                </p>
+                                <p style="margin-left:0px;">
+                                    Esta política de privacidade é regida pelas leis da jurisdição em que a King's Solutions Corp opera e está em conformidade com a LGPD e outras leis de proteção de dados aplicáveis.
+                                </p>
+                                <p style="margin-left:0px;">
+                                    Se você tiver alguma dúvida ou preocupação sobre esta política de privacidade ou nossos termos de uso, entre em contato conosco pelo endereço de e-mail [inserir endereço de e-mail de contato].
+                                </p>
+                                <p style="margin-left:0px;">
+                                    Agradecemos por confiar nos serviços de folha de pagamento da King's Solutions Corp e por respeitar a privacidade de nossos usuários.
+                                </p>
+                                <p style="margin-left:0px;">
+                                    <strong>King's Solutions Corp</strong>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="~/js/jquery.mask.js"></script>
+
+    <script>
+        const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
+        const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
+    </script>
+    @await RenderSectionAsync("Scripts", required: false)
+
+</body>
+</html>
+
