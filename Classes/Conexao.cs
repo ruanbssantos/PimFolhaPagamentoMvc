@@ -1,16 +1,23 @@
-﻿using System.Data.SqlClient;
+﻿using Microsoft.Extensions.Configuration;
+using System.Data.SqlClient;
+using System.Text.Json;
 
 namespace PimFolhaPagamentoV2.Classes
 {
     public class Conexao
-    {
-        public SqlConnection conn;
-
+    { 
+        public SqlConnection? conn; 
         public void AbrirConexao()
         {
             try
-            {
-                conn = new SqlConnection("Server=localhost;Database=PIM_III;User Id=SA;Password=1q2w3e4r5t@@;MultipleActiveResultSets=True;");
+            { 
+                var builder = new ConfigurationBuilder()
+                    .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
+
+                IConfigurationRoot configuration = builder.Build();
+                var connString = configuration.GetConnectionString("DataBase");
+                  
+                conn = new SqlConnection(connString); 
                 conn.Open();
             }
             catch (Exception ex)
@@ -26,6 +33,7 @@ namespace PimFolhaPagamentoV2.Classes
                 if (conn != null)
                 {
                     conn.Close();
+                    conn.Dispose();
                 }
             }
             catch (Exception ex)

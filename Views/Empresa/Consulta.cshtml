@@ -1,4 +1,6 @@
-﻿<div class="container-fluid px-4 mt-4 mb-4">
+﻿<script src="~/js/Empresa/Consulta.js" asp-append-version="true"></script>
+
+<div class="container-fluid px-4 mt-4 mb-4">
     <div class="row justify-content-between">
         <div class="col-auto">
             <div class="row h-100 no-gutters align-items-center">
@@ -80,8 +82,8 @@
                                 </div>
                                 <div class="row">
                                     <div class="col-12">
-                                        <div class="table-responsive-xl" id="tb_busca">
-                                            <table class="table table-striped border-table">
+                                        <div class="table-responsive-xl">
+                                            <table class="table table-striped border-table" id="tb_busca">
                                                 <thead>
                                                     <tr>
                                                         <th>#</th>
@@ -113,18 +115,3 @@
         </div>
     </div>
 </div>
-
-
-
-<script>
-
-    $(document).ready(function () {
-
-        $('.btn_novo').on('click', function () { window.open('Cadastro', '_self'); });
-
-        dados = []
-
-        fcn_gera_paginacao('#tb_busca', 0, 0, $('#cmb_qtdRegistro').val(), dados, 1)
-        
-    });
-</script>

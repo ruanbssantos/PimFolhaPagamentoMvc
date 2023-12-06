@@ -8,6 +8,7 @@ namespace PimFolhaPagamentoV2
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
+            builder.Services.AddSession();  
 
             var app = builder.Build();
 
@@ -23,12 +24,22 @@ namespace PimFolhaPagamentoV2
             app.UseStaticFiles();
 
             app.UseRouting();
-
+ 
             app.UseAuthorization();
+
+            app.UseSession();   
 
             app.MapControllerRoute(
                 name: "default",
                 pattern: "{controller=Home}/{action=Index}/{id?}");
+
+            // Armazenando o ID da sessão na sessão
+            app.Use(async (context, next) =>
+            {
+                context.Session.SetString("id_usuario", "1");
+                await next.Invoke();
+            });
+
 
             app.Run();
         }

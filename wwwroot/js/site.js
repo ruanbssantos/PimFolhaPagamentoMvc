@@ -38,7 +38,8 @@ $(document).ready(function () {
 $.ajaxSetup({
 
     error: function (xhr, textStatus, errorThrown) {
-        alert("Erro");
+        //alert("Erro");
+        fcn_alert('Atenção!', 'Desculpe-nos, mas ocorreu um erro inesperado. Por favor, tente atualizar a página e, caso o problema persista, entre em contato com o administrador do sistema. Detalhe do erro: <br />' + xhr.responseText);
         //if (this.url.toUpperCase().indexOf('WEB_SALVARERRO.ASP') == -1) {
         //    var responseText = xhr.responseText;
         //    dados = new Object;
@@ -75,11 +76,11 @@ $.ajaxSetup({
     },
     complete: function (jqXHR, textStatus) {
         if (jqXHR.statusCode().status == 200) {
-            if (jqXHR.responseJSON) {
-                if (jqXHR.responseJSON.sessaoExpirada) {
-                    window.open(vstr_localJs + 'index.asp', '_self')
-                }
-            }
+            //if (jqXHR.responseJSON) {
+            //    if (jqXHR.responseJSON.sessaoExpirada) {
+            //        window.open(vstr_localJs + 'index.asp', '_self')
+            //    }
+            //}
         }
     }
 });
@@ -473,7 +474,7 @@ function fcn_valoresPadroes(p_seletor) {
     $(p_seletor + '.maskMesBarraAno').mask('##/####');
 
     //marca campos
-    $(seletorInicial).find('input.obg,textarea.obg').map(function () {
+    $(seletorInicial).find('input.obg,textarea.obg,select.obg').map(function () {
         const label = $('label[for=' + $(this).prop('id') + ']');
         if (label.length > 0) {
             if (!label.hasClass('obgMark')) label.addClass('obgMark');
