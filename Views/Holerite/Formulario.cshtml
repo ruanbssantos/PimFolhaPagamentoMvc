@@ -1,4 +1,28 @@
-﻿<script src="~/js/Funcionario/Formulario.js" asp-append-version="true"></script>
+﻿@{
+    // Obtendo o ano atual
+    int anoAtual = DateTime.Now.Year;
+    int anoMinimo = anoAtual - 20;
+    int anoMaximo = anoAtual + 10;
+}
+
+<script src="~/js/Holerite/Formulario.js" asp-append-version="true"></script>
+<script src="~/js/Sortable.js" asp-append-version="true"></script>
+
+<style>
+    .ghost {
+        opacity: 0.5;
+        background: #343434 !important;
+        color: white !important;
+    }
+
+    #container_sortable tr:not(.tr_remove) {
+        cursor: move !important
+    }
+
+    #div_tb_aprovadores, #div_tb_adm {
+        min-height: auto !important;
+    }
+</style>
 
 <div class="container-fluid px-4 mt-4 mb-4">
     <div class="row justify-content-between">
@@ -8,114 +32,189 @@
                     <h3>@ViewData["Title"]</h3>
                 </div>
             </div>
-        </div> 
+        </div>
     </div>
 </div>
 <div class="container-fluid px-4" id="containerBody">
     <div class="row">
         <div class="col-12">
-            <div class="container-formulario shadow p-2 p-sm-3 p-md-4">
-                <input type="hidden" class="notClear" id="hdn_idFuncionario" name="hdn_idFuncionario" value="@ViewBag.id" />
-
+            <div class="container-formulario shadow p-2 p-sm-3 p-md-4 loading"> 
                 <div class="row">
-                    <div class="col-12 mb-4">
+                    <div class="col-12 frm_request mb-4">
+                        <input type="hidden" class="notClear" id="hdn_idHolerite" name="hdn_idHolerite" value="@ViewBag.id" />
                         <div class="card">
                             <div class="card-header text-white bg-dark-secundary">
                                 <label class="sub-titulo-form">Dados</label>
                             </div>
                             <div class="card-body">
                                 <div class="row">
-                                    <div class="col-12 col-sm-12 col-lg-12 col-xl-4 col-xxl-2">
+                                    <div class="col-12 col-sm-12 col-lg-12 col-xl-6 col-xxl-6">
                                         <div class="form-group">
-                                            <label for="txt_cpf">CPF</label>
-                                            <input type="text" class="form-control obg campoNumerico" name="txt_cpf" id="txt_cpf" maxlength="15" />
+                                            <label for="txt_empresa">Empresa</label>
+                                            <input type="text" class="form-control obg field_autoBusca" name="txt_empresa" id="txt_empresa" data-field_type="Field_empresa" />
                                         </div>
                                     </div>
-                                    <div class="col-12 col-sm-12 col-lg-12 col-xl-8 col-xxl-10">
+                                    <div class="col-12 col-sm-12 col-lg-12 col-xl-6 col-xxl-6">
                                         <div class="form-group">
-                                            <label for="txt_nome">Nome</label>
-                                            <input type="text" class="form-control obg" name="txt_nome" id="txt_nome" maxlength="250" />
+                                            <label for="txt_funcionario">Funcionário</label>
+                                            <input type="text" class="form-control obg field_autoBusca" name="txt_funcionario" id="txt_funcionario" data-field_type="Field_funcionario" />
                                         </div>
                                     </div>
-                                    <div class="col-12 col-sm-12 col-lg-12">
+                                    <div class="col-12 col-sm-12 col-lg-12 col-xl col-xxl">
                                         <div class="form-group">
-                                            <label for="txt_email">E-mail</label>
-                                            <input type="text" class="form-control obg" name="txt_email" id="txt_email" maxlength="250" />
+                                            <label for="txt_contrato">Contrato</label>
+                                            <input type="text" class="form-control obg field_autoBusca" name="txt_contrato" id="txt_contrato" data-field_type="Field_contrato" />
                                         </div>
                                     </div>
-                                    <div class="col-12 col-md-6">
-                                        <label for="cmb_status">Status</label>
-                                        <select class="form-control obg" name="cmb_status" id="cmb_status">
-                                            <option value="">Selecione</option>
-                                            <option value="1">Ativo</option>
-                                            <option value="0">Inativo</option>
-                                        </select>
-                                    </div>
-                                    <div class="col-12 col-md-6">
-                                        <label for="cmb_admin">Administrativo</label>
-                                        <select class="form-control obg" name="cmb_admin" id="cmb_admin">
-                                            <option value="">Selecione</option>
-                                            <option value="1">Sim</option>
-                                            <option value="0">Não</option>
-                                        </select>
+                                    <div class="col-12 col-sm-12 col-lg-auto col-xl-auto col-xxl-auto">
+                                        <div class="form-group">
+                                            <label for="txt_dtAdmissao">Admissão</label>
+                                            <input type="date" class="form-control obg" name="txt_dtAdmissao" id="txt_dtAdmissao" disabled />
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-12 mb-4">
-                        <div class="card">
-                            <div class="card-header text-white bg-dark-secundary">
-                                <label class="sub-titulo-form">Endereço</label>
-                            </div>
-                            <div class="card-body">
                                 <div class="row">
-                                    <div class="col-12 col-sm-12 col-lg-6 col-xl-4 col-xxl-2">
+                                    <div class="col-12 col-sm-12 col-lg-12 col-xl">
                                         <div class="form-group">
-                                            <label for="txt_cep">CEP</label>
-                                            <input type="text" class="form-control obg campoNumerico" name="txt_cep" id="txt_cep" maxlength="9" />
+                                            <label for="txt_salarioBase">Salário base</label>
+                                            <input type="text" class="form-control obg maskMoeda" name="txt_salarioBase" id="txt_salarioBase" maxlength="12" />
                                         </div>
                                     </div>
-                                    <div class="col-12 col-sm-12 col-lg-12 col-xl-8 col-xxl-8">
+                                    <div class="col-12 col-sm-12 col-lg-12 col-xl">
                                         <div class="form-group">
-                                            <label for="txt_endereco">Endereço</label>
-                                            <input type="text" class="form-control obg" name="txt_endereco" id="txt_endereco" maxlength="250" />
+                                            <label for="txt_baseINSS">Base INSS</label>
+                                            <input type="text" class="form-control obg maskMoeda" name="txt_baseINSS" id="txt_baseINSS" maxlength="12" />
                                         </div>
                                     </div>
-                                    <div class="col-12 col-sm-12 col-lg-6 col-xl-4 col-xxl-2">
+                                    <div class="col-12 col-sm-12 col-lg-12 col-xl">
                                         <div class="form-group">
-                                            <label for="txt_numeroResidencial">Número</label>
-                                            <input type="text" class="form-control obg" name="txt_numeroResidencial" id="txt_numeroResidencial" maxlength="10" />
+                                            <label for="txt_baseFGTS">Base FGTS</label>
+                                            <input type="text" class="form-control obg maskMoeda" name="txt_baseFGTS" id="txt_baseFGTS" maxlength="12" />
                                         </div>
                                     </div>
-                                    <div class="col-12 col-sm-12 col-lg-6 col-xl-8 col-xxl-2">
+                                    <div class="col-12 col-sm-12 col-lg-12 col-xl">
                                         <div class="form-group">
-                                            <label for="txt_uf">UF</label>
-                                            <input type="text" class="form-control obg" name="txt_uf" id="txt_uf" maxlength="250" />
+                                            <label for="txt_valorFGTS">Valor FGTS</label>
+                                            <input type="text" class="form-control obg maskMoeda" name="txt_valorFGTS" id="txt_valorFGTS" maxlength="12" />
                                         </div>
                                     </div>
-                                    <div class="col-12 col-sm-12 col-lg-6 col-xl-6 col-xxl">
+                                    <div class="col-12 col-sm-12 col-lg-12 col-xl">
                                         <div class="form-group">
-                                            <label for="txt_cidade">Cidade</label>
-                                            <input type="text" class="form-control obg" name="txt_cidade" id="txt_cidade" maxlength="250" />
+                                            <label for="txt_baseIRRF">Base IRRF</label>
+                                            <input type="text" class="form-control obg maskMoeda" name="txt_baseIRRF" id="txt_baseIRRF" maxlength="12" />
                                         </div>
                                     </div>
-                                    <div class="col-12 col-sm-12 col-lg-6 col-xl-6 col-xxl">
+                                </div> 
+                                <div class="row">
+                                    <div class="col-12 col-sm-12 col-lg col-xl col-xxl">
                                         <div class="form-group">
-                                            <label for="txt_bairro">Bairro</label>
-                                            <input type="text" class="form-control obg" name="txt_bairro" id="txt_bairro" maxlength="250" />
+                                            <label for="cmb_status">Status</label>
+                                            <select class="form-select obg" name="cmb_status" id="cmb_status" >
+                                                <option value="">Selecione</option>
+                                                <option value="1">Salvo</option>
+                                                <option value="2">Finalizado</option>
+                                                <option value="3">Cancelado</option>
+                                            </select>
                                         </div>
                                     </div>
-                                    <div class="col-12 col-sm-12 col-lg-12 col-xl-12 col-xxl">
+                                    <div class="col-12 col-sm-12 col-lg col-xl col-xxl">
                                         <div class="form-group">
-                                            <label for="txt_complemento">Complemento</label>
-                                            <input type="text" class="form-control" name="txt_complemento" id="txt_complemento" maxlength="250" />
+                                            <label for="cmb_mes">Mês</label>
+                                            <select class="form-select obg" name="cmb_mes" id="cmb_mes" runat="server">
+                                                <option value="">Selecione</option>
+                                                @for (int mes = 1; mes <= 12; mes++)
+                                                {
+                                                    <option value="@mes">@mes</option>
+                                                }
+                                            </select>
                                         </div>
                                     </div>
+                                    <div class="col-12 col-sm-12 col-lg col-xl col-xxl">
+                                        <div class="form-group">
+                                            <label for="cmb_ano">Ano</label>
+                                            <select class="form-select obg" name="cmb_ano" id="cmb_ano">
+                                                <option value="">Selecione</option>
+                                                @for (int ano = anoMinimo; ano <= anoMaximo; ano++)
+                                                {
+                                                    <option value="@ano">@ano</option>
+                                                }
+                                            </select>
+                                        </div>
+                                    </div>
+
                                 </div>
                             </div>
                         </div>
                     </div> 
+
+
+                    <div class="col-12 mb-4">
+                        <div class="card">
+                            <div class="card-header text-white bg-dark-secundary">
+                                <label class="sub-titulo-form">Lançamentos</label>
+                            </div>
+                            <div class="card-body">
+                                <div class="row frm_lancamento">
+                                    <div class="col-12 col-sm-12 col-lg">
+                                        <div class="form-group">
+                                            <label for="cmb_tipo">Tipo</label>
+                                            <select class="form-control obg" name="cmb_tipo" id="cmb_tipo">
+                                                <option value="">Selecione</option>
+                                                <option value="1">Proventos</option>
+                                                <option value="2">Descontos</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-sm-12 col-lg">
+                                        <div class="form-group">
+                                            <label for="txt_descricao">Descrição</label>
+                                            <input type="text" class="form-control obg" name="txt_descricao" id="txt_descricao" maxlength="30" />
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-sm-12 col-lg">
+                                        <div class="form-group">
+                                            <label for="txt_referencia">Referência</label>
+                                            <input type="text" class="form-control maskMoeda" name="txt_referencia" id="txt_referencia" maxlength="12" />
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-sm-12 col-lg">
+                                        <div class="form-group">
+                                            <label for="txt_valor">Valor</label>
+                                            <input type="text" class="form-control obg maskMoeda" name="txt_valor" id="txt_valor" maxlength="12" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row m-4">
+                                    <div class="col-12 text-center">
+                                        <div class="form-group">
+                                            <button type="button" class="btn btn-secondary" title="Adicionar" id="btn_addLancamento">
+                                                <i class="fa-solid fa-plus"></i>
+                                            </button>                                            
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row frm_request">
+                                    <div class="col-12">
+                                        <div class="table-responsive-xl tb-sticky-header" id="div_tb_lancamentos">
+                                            <table class="table table-striped border-table tb_clear" id="tb_lancamentos">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Tipo</th>
+                                                        <th>Descrição</th>
+                                                        <th>Referência</th>
+                                                        <th>Valor</th>
+                                                        <th></th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="container_sortable"></tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div> 
+                            </div>
+                        </div>
+                    </div>
+
                     <div class="col-12 my-3 text-center">
                         <input type="button" class="btn btn-success" name="btn_gravar" id="btn_gravar" value="Gravar" title="Gravar" />
                         <input type="button" class="btn btn-secondary" name="btn_voltar" id="btn_voltar" value="Voltar" title="Voltar" />

@@ -1,4 +1,6 @@
-﻿<div class="container-fluid px-4 mt-4 mb-4">
+﻿<script src="~/js/Holerite/Consulta.js" asp-append-version="true"></script>
+
+<div class="container-fluid px-4 mt-4 mb-4">
     <div class="row justify-content-between">
         <div class="col-auto">
             <div class="row h-100 no-gutters align-items-center">
@@ -7,12 +9,23 @@
                 </div>
             </div>
         </div>
+        <div class="col-auto d-flex align-items-center">
+            <div class="row">
+                <div class="col-auto">
+                    <div class="btn-group">
+                        <button type="button" class="btn-acesso-rapido btn_novo" data-bs-custom-class="custom-tooltip" data-bs-toggle="tooltip" data-bs-placement="left" data-bs-title="Novo">
+                            <i class="fa-solid fa-plus"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 <div class="container-fluid px-4" id="containerBody">
     <div class="row">
         <div class="col-12">
-            <div class="container-formulario shadow p-3 p-md-4">
+            <form method="post" id="frm_consulta" action="" class="container-formulario shadow p-3 p-md-4">
                 <div class="row">
                     <div class="col-12 mb-4">
                         <div class="card">
@@ -70,10 +83,12 @@
                                             <table class="table table-striped border-table">
                                                 <thead>
                                                     <tr>
+                                                        <th>#</th>
                                                         <th>Referência</th>
                                                         <th>Empresa</th>
                                                         <th>Funcionário</th>
-                                                        <th>Data Emissão</th> 
+                                                        <th>CBO</th> 
+                                                        <th>Status</th> 
                                                         <th></th> 
                                                     </tr> 
                                                 </thead>
@@ -88,18 +103,7 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </form>
         </div>
     </div>
 </div>
-
-
-
-<script>
-
-    $(document).ready(function () {
-        dados = []
-
-        fcn_gera_paginacao('#tb_busca', 0, 0, $('#cmb_qtdRegistro').val(), dados, 1)
-    });
-</script>

@@ -24,6 +24,7 @@ Create Procedure dbo.SP_funcionario
 	,@complemento			nvarchar(MAX)	= null
 	,@admin_fl              bit				= null
 	,@status_fl             bit				= null 
+	,@id_empresa			bigint			= null
 	  
 AS
 BEGIN
@@ -129,7 +130,10 @@ BEGIN
 						funcionario
 					WHERE
 						status_fl = 1'
-		
+
+				if len(@id_empresa) > 0
+					set @vstr_cmd += ' AND id_funcionario in (SELECT id_funcionario FROM contrato WHERE id_empresa = ' + CONVERT(varchar(max),@id_empresa) + ')'
+
 				if LEN(@cpf) > 0
 					set @vstr_cmd += ' AND cpf like ''%' + CONVERT(varchar,@cpf) + '%'''
 

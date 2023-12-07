@@ -206,10 +206,29 @@ function fcn_inserirRegistroTabelaGenerica(pstr_seletorTabela, pstr_msgTabelaVaz
             '</tr>'
 
     } else {
-        vstr_layout = '<tr>' +
-            '<td class="descricao">' + p_registro.descricao + '</td>' +
-            '<td class="text-center"><i class="fas fa-trash cursor-pointer btn_remove" title="Remover"></i></td>' +
-            '</tr>'
+
+        if ($.isArray(p_registro.descricao)) {
+
+            let vstr_td = "";
+
+            $.each(p_registro.descricao, function (index, registro) {
+                $.each(registro, function (classe, value) {
+                    vstr_td += '<td class="' + classe + '">' + value + '</td>';
+                })
+            })
+
+            vstr_layout = '<tr>' +
+                vstr_td +
+                '<td class="text-center"><i class="fas fa-trash cursor-pointer btn_remove" title="Remover"></i></td>' +
+                '</tr>'
+
+        } else {
+
+            vstr_layout = '<tr>' +
+                '<td class="descricao">' + p_registro.descricao + '</td>' +
+                '<td class="text-center"><i class="fas fa-trash cursor-pointer btn_remove" title="Remover"></i></td>' +
+                '</tr>'
+        }
     }
 
     $(pstr_seletorTabela + ' tbody')

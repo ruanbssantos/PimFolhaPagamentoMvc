@@ -63,6 +63,8 @@ namespace PimFolhaPagamentoV2.Controllers.AutoBusca
                     cmd.Parameters.Add("@vstr_tipoOper", System.Data.SqlDbType.VarChar).Value = "SEL";
                     cmd.Parameters.Add("@vstr_acao", System.Data.SqlDbType.NVarChar).Value = "FIELD_FUNCIONARIO";
 
+                    cmd.Parameters.Add("@id_empresa", System.Data.SqlDbType.NVarChar).Value = Function.LimparString(dados["id_empresa"].ToString());
+
                     if (Function.IsNumeric(dados["ds_busca"].ToString())) cmd.Parameters.Add("@cpf", System.Data.SqlDbType.NVarChar).Value = Function.LimparString(dados["ds_busca"].ToString());
                     else cmd.Parameters.Add("@nome", System.Data.SqlDbType.NVarChar).Value = Function.LimparString(dados["ds_busca"].ToString());
 
@@ -102,6 +104,49 @@ namespace PimFolhaPagamentoV2.Controllers.AutoBusca
                     cmd.Parameters.Add("@vstr_tipoOper", System.Data.SqlDbType.VarChar).Value = "SEL";
                     cmd.Parameters.Add("@vstr_acao", System.Data.SqlDbType.NVarChar).Value = "FIELD_CBO";
                     cmd.Parameters.Add("@top", System.Data.SqlDbType.NVarChar).Value = "50";
+
+                    if (Function.IsNumeric(dados["ds_busca"].ToString())) cmd.Parameters.Add("@codigo", System.Data.SqlDbType.NVarChar).Value = Function.LimparString(dados["ds_busca"].ToString());
+                    else cmd.Parameters.Add("@titulo", System.Data.SqlDbType.NVarChar).Value = Function.LimparString(dados["ds_busca"].ToString());
+
+
+                    SqlDataReader rs = cmd.ExecuteReader();
+                    dadosBanco = RsToArray.CriarJSONDoDataReader(rs);
+
+                    rs.Close();
+                }
+                conexao.FecharConexao();
+
+                if (dadosBanco.erroSql) return BadRequest(dadosBanco.resultado[0][0]["SP_ERROR_MESSAGE"].ToString());
+                else return Json(new { Status = true, dadosBanco.resultado });
+
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpPost]
+        public IActionResult Field_contrato()
+        {
+            var dados = Request.Form;
+            try
+            {
+                Conexao conexao = new Conexao();
+                ResultadoBancoDados dadosBanco;
+
+                conexao.AbrirConexao();
+                using (SqlCommand cmd = new SqlCommand())
+                {
+                    cmd.Connection = conexao.conn;
+                    cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                    cmd.CommandText = "SP_contrato";
+                    cmd.Parameters.Add("@vstr_tipoOper", System.Data.SqlDbType.VarChar).Value = "SEL";
+                    cmd.Parameters.Add("@vstr_acao", System.Data.SqlDbType.NVarChar).Value = "FIELD_CONTRATO"; 
+
+                    cmd.Parameters.Add("@id_empresa", System.Data.SqlDbType.NVarChar).Value = Function.LimparString(dados["id_empresa"].ToString());
+                    cmd.Parameters.Add("@id_funcionario", System.Data.SqlDbType.NVarChar).Value = Function.LimparString(dados["id_funcionario"].ToString());
+                    cmd.Parameters.Add("@status_fl", System.Data.SqlDbType.NVarChar).Value = Function.LimparString(dados["status_fl"].ToString());
 
                     if (Function.IsNumeric(dados["ds_busca"].ToString())) cmd.Parameters.Add("@codigo", System.Data.SqlDbType.NVarChar).Value = Function.LimparString(dados["ds_busca"].ToString());
                     else cmd.Parameters.Add("@titulo", System.Data.SqlDbType.NVarChar).Value = Function.LimparString(dados["ds_busca"].ToString());

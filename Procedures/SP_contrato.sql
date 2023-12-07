@@ -22,6 +22,8 @@ Create Procedure dbo.SP_contrato
 	,@nr_baseFGTS           decimal(18, 2)  = null
 	,@nr_valorFGTS          decimal(18, 2)  = null
 	,@nr_baseIRRF           decimal(18, 2)  = null
+	,@codigo				nvarchar(max)	= null
+	,@titulo				nvarchar(max)	= null
 	  
 AS
 BEGIN
@@ -115,22 +117,40 @@ BEGIN
 					id_contrato = @id_contrato
 			END 
 
-			IF @vstr_acao = 'FIELD_FUNCIONARIO'
+			IF @vstr_acao = 'FIELD_CONTRATO'
 			BEGIN 
 				set @vstr_cmd = ' 
-					SELECT 
-						id_funcionario AS [id]
-						,nome  + '' - '' + dbo.MascaraCPFCNPJ(cpf) AS [label]
+					SELECT
+						C.id_contrato AS [id]
+						,cbo.codigo + '' - '' + cbo.titulo AS [label]
+						,CONVERT(varchar,dt_admissao,23) as txt_dtAdmissao
+						,FORMAT(C.nr_salarioBruto, ''N'', ''pt-BR'') AS nr_salarioBruto
+						,FORMAT(C.nr_baseINSS, ''N'', ''pt-BR'') AS nr_baseINSS
+						,FORMAT(C.nr_baseFGTS, ''N'', ''pt-BR'') AS nr_baseFGTS
+						,FORMAT(C.nr_valorFGTS, ''N'', ''pt-BR'') AS nr_valorFGTS
+						,FORMAT(C.nr_baseIRRF, ''N'', ''pt-BR'') AS nr_baseIRRF
 					FROM
-						funcionario
+						contrato C
+						INNER JOIN empresa E ON C.id_empresa = E.id_empresa
+						INNER JOIN funcionario F ON C.id_funcionario = F.id_funcionario
+						INNER JOIN cbo ON C.id_cbo = cbo.id_cbo
 					WHERE
-						status_fl = 1'
-		
-				--if LEN(@cpf) > 0
-				--	set @vstr_cmd += ' AND cpf like ''%' + CONVERT(varchar,@cpf) + '%'''
+						1=1'
 
-				--if LEN(@nome) > 0
-				--	set @vstr_cmd += ' AND nome) like ''%' + CONVERT(varchar,@nome) + '%'''
+				if LEN(@id_empresa) > 0
+					set @vstr_cmd += ' AND C.id_empresa =' + CONVERT(varchar,@id_empresa) 
+
+				if LEN(@id_funcionario) > 0
+					set @vstr_cmd += ' AND C.id_funcionario =' + CONVERT(varchar,@id_funcionario) 
+
+				if LEN(@codigo) > 0
+					set @vstr_cmd += ' AND cbo.codigo like ''%' + CONVERT(varchar(200),@codigo) + '%'''
+
+				if LEN(@titulo) > 0
+					set @vstr_cmd += ' AND cbo.titulo like ''%' + CONVERT(varchar(200),@titulo) + '%'''
+
+				if LEN(@status_fl) > 0
+					set @vstr_cmd += ' AND C.status_fl =' + CONVERT(varchar,@status_fl) 
 
 				set @vstr_cmd += ' 
 					ORDER BY 

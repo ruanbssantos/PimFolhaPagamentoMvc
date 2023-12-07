@@ -271,7 +271,10 @@ a:hover {
 /******************************************************************************************************/
 /*FORMULÁRIOS*/
 /******************************************************************************************************/
-.text-right{
+cursor-pointer {
+    cursor:pointer;
+}
+.text-right {
     text-align: right;
 }
 .text-left {
@@ -355,6 +358,51 @@ label.obgMark::after {
     /*width: 5px;*/
     background-color: #666666;
     /*-webkit-border-radius: 3px;*/
+}
+
+/******************************************************************************************************/
+/*TABELAS*/
+/******************************************************************************************************/
+/* par */
+.table-striped tbody tr:nth-child(even) {
+    background-color: rgba(237,237,237,.05) !important;
+}
+
+.border-table {
+    border: 1px solid #e3e6f0;
+}
+
+.tb-sticky-header {
+    /* min-height: 180px; */
+    height: auto;
+    max-height: 400px;
+    overflow: auto;
+}
+
+.tb-sticky-header thead {
+    position: sticky;
+    top: 0;
+}
+
+.tb-sticky-header thead > tr {
+    box-shadow: 0px 2px 8px 0px #c7bdbd
+}
+
+.tb-sticky-header thead > tr > th, .sticky-header thead > tr > td {
+    background-color: white;
+    z-index: 9;
+    margin: 0;
+}
+
+@media (max-width: 400px) {
+    .table-fullscren {
+        max-height: 400px !important;
+    }
+}
+
+.table-fullscren {
+    min-height: calc(auto+41px);
+    max-height: 80vh;
 }
 
 /******************************************************************************************************/

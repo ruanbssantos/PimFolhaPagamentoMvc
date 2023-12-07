@@ -9,10 +9,10 @@
   <ItemGroup>
     <Content Remove="wwwroot\js\Cbo\Consulta.js" />
     <Content Remove="wwwroot\js\Cbo\Formulario.js" />
+    <Content Remove="wwwroot\js\Holerite\Consulta.js" />
+    <Content Remove="wwwroot\js\Holerite\Formulario.js" />
     <Content Remove="wwwroot\js\Contrato\Consulta.js" />
     <Content Remove="wwwroot\js\Contrato\Formulario.js" />
-    <Content Remove="wwwroot\js\Funcionario\Consulta.js" />
-    <Content Remove="wwwroot\js\Funcionario\Formulario.js" />
   </ItemGroup>
 
   <ItemGroup>
@@ -24,10 +24,10 @@
   <ItemGroup>
     <None Include="wwwroot\js\Cbo\Consulta.js" />
     <None Include="wwwroot\js\Cbo\Formulario.js" />
+    <None Include="wwwroot\js\Holerite\Consulta.js" />
+    <None Include="wwwroot\js\Holerite\Formulario.js" />
     <None Include="wwwroot\js\Contrato\Consulta.js" />
     <None Include="wwwroot\js\Contrato\Formulario.js" />
-    <None Include="wwwroot\js\Funcionario\Consulta.js" />
-    <None Include="wwwroot\js\Funcionario\Formulario.js" />
     <None Include="wwwroot\js\Empresa\Consulta.js" />
     <None Include="wwwroot\js\Empresa\Formulario.js" />
   </ItemGroup>
