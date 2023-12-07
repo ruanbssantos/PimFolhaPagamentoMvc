@@ -1,4 +1,5 @@
-﻿ 
+﻿<script src="~/js/Funcionario/Formulario.js" asp-append-version="true"></script>
+
 <div class="container-fluid px-4 mt-4 mb-4">
     <div class="row justify-content-between">
         <div class="col-auto">
@@ -14,6 +15,8 @@
     <div class="row">
         <div class="col-12">
             <div class="container-formulario shadow p-2 p-sm-3 p-md-4">
+                <input type="hidden" class="notClear" id="hdn_idFuncionario" name="hdn_idFuncionario" value="@ViewBag.id" />
+
                 <div class="row">
                     <div class="col-12 mb-4">
                         <div class="card">
@@ -25,13 +28,13 @@
                                     <div class="col-12 col-sm-12 col-lg-12 col-xl-4 col-xxl-2">
                                         <div class="form-group">
                                             <label for="txt_cpf">CPF</label>
-                                            <input type="text" class="form-control obg" name="txt_cpf" id="txt_cpf" maxlength="15" />
+                                            <input type="text" class="form-control obg campoNumerico" name="txt_cpf" id="txt_cpf" maxlength="15" />
                                         </div>
                                     </div>
                                     <div class="col-12 col-sm-12 col-lg-12 col-xl-8 col-xxl-10">
                                         <div class="form-group">
-                                            <label for="txt_razaoSocial">Nome</label>
-                                            <input type="text" class="form-control obg" name="txt_razaoSocial" id="txt_razaoSocial" maxlength="250" />
+                                            <label for="txt_nome">Nome</label>
+                                            <input type="text" class="form-control obg" name="txt_nome" id="txt_nome" maxlength="250" />
                                         </div>
                                     </div>
                                     <div class="col-12 col-sm-12 col-lg-12">
@@ -39,6 +42,22 @@
                                             <label for="txt_email">E-mail</label>
                                             <input type="text" class="form-control obg" name="txt_email" id="txt_email" maxlength="250" />
                                         </div>
+                                    </div>
+                                    <div class="col-12 col-md-6">
+                                        <label for="cmb_status">Status</label>
+                                        <select class="form-control obg" name="cmb_status" id="cmb_status">
+                                            <option value="">Selecione</option>
+                                            <option value="1">Ativo</option>
+                                            <option value="0">Inativo</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-12 col-md-6">
+                                        <label for="cmb_admin">Acesso Administrativo?</label>
+                                        <select class="form-control obg" name="cmb_admin" id="cmb_admin">
+                                            <option value="">Selecione</option>
+                                            <option value="1">Sim</option>
+                                            <option value="0">Não</option>
+                                        </select>
                                     </div>
                                 </div>
                             </div>
@@ -54,7 +73,7 @@
                                     <div class="col-12 col-sm-12 col-lg-6 col-xl-4 col-xxl-2">
                                         <div class="form-group">
                                             <label for="txt_cep">CEP</label>
-                                            <input type="text" class="form-control obg" name="txt_cep" id="txt_cep" maxlength="9" />
+                                            <input type="text" class="form-control obg campoNumerico" name="txt_cep" id="txt_cep" maxlength="9" />
                                         </div>
                                     </div>
                                     <div class="col-12 col-sm-12 col-lg-12 col-xl-8 col-xxl-8">
@@ -72,7 +91,7 @@
                                     <div class="col-12 col-sm-12 col-lg-6 col-xl-8 col-xxl-2">
                                         <div class="form-group">
                                             <label for="txt_uf">UF</label>
-                                            <input type="text" class="form-control obg field_autoBusca" name="txt_uf" id="txt_uf"  data-field_type="Field_Cbo" />
+                                            <input type="text" class="form-control obg" name="txt_uf" id="txt_uf" maxlength="250" />
                                         </div>
                                     </div>
                                     <div class="col-12 col-sm-12 col-lg-6 col-xl-6 col-xxl">
@@ -85,6 +104,12 @@
                                         <div class="form-group">
                                             <label for="txt_bairro">Bairro</label>
                                             <input type="text" class="form-control obg" name="txt_bairro" id="txt_bairro" maxlength="250" />
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-sm-12 col-lg-12 col-xl-12 col-xxl">
+                                        <div class="form-group">
+                                            <label for="txt_complemento">Complemento</label>
+                                            <input type="text" class="form-control" name="txt_complemento" id="txt_complemento" maxlength="250" />
                                         </div>
                                     </div>
                                 </div>
@@ -100,25 +125,3 @@
         </div>
     </div>
 </div>
-
-
-
-<script>
-
-    $(document).ready(function () {
-
-        $('#btn_gravar').on('click', function () { fcn_gravar(); });
-        $('#btn_voltar').on('click', function () { window.open('Consulta', '_self'); });
-    });
-
-
-    function fcn_gravar() {
-
-        if (fcn_validaCampos('.container-formulario')) {
-
-            console.log(fcn_pegarValores('.container-formulario'))
-
-        }
-
-    }
-</script>

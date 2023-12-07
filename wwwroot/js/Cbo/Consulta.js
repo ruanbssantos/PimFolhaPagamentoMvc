@@ -1,19 +1,19 @@
-﻿const vstr_local = window.location.origin + '/Empresa/';
+﻿const vstr_local = window.location.origin + '/Cbo/';
 $(document).ready(function () {
 
     $('.btn_novo').on('click', function () { window.open('Cadastro', '_self'); });
      
 
-    fcn_carregaEmpresa();
-    $('#btn_buscar').on('click', function () { fcn_carregaEmpresa(); });
+    fcn_carregaCbo();
+    $('#btn_buscar').on('click', function () { fcn_carregaCbo(); });
     $('#cmb_qtdRegistro').on('change', function () {
         $('#tb_busca').find('.paginacao').html('');
-        fcn_carregaEmpresa();
+        fcn_carregaCbo();
 
     });
 });
 
-function fcn_carregaEmpresa() {
+function fcn_carregaCbo() {
 
     $('#tb_busca tbody').html('<tr><td colspan="100%" class="text-center">Aguarde...</td></tr>');
     var vint_pagina = $('#tb_busca .btn_paginas.btn-success').data('value');
@@ -50,7 +50,7 @@ function fcn_carregaEmpresa() {
                 $('#tb_busca .btn_paginas').on('click', function () {
                     $('#tb_busca .btn_paginas').removeClass('btn-success');
                     $(this).addClass('btn-success');
-                    fcn_carregaEmpresa();
+                    fcn_carregaCbo();
                 });
                  
                 // //FUNÇÕES

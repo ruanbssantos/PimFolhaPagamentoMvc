@@ -10,8 +10,10 @@ namespace PimFolhaPagamentoV2.Controllers.AutoBusca
         Conexao conexao = new Conexao();
 
         // GET: AutoBuscaController
-        public ActionResult Field_Cbo()
+        [HttpPost]
+        public IActionResult Field_Cbo()
         {
+            //var data = Request.Form;
             ResultadoBancoDados dadosBanco;
 
             conexao.AbrirConexao();
@@ -21,7 +23,7 @@ namespace PimFolhaPagamentoV2.Controllers.AutoBusca
                 cmd.CommandType = System.Data.CommandType.StoredProcedure;
                 cmd.CommandText = "SP_Cbo";
                 cmd.Parameters.Add("@vstr_tipoOper", System.Data.SqlDbType.VarChar).Value = "SEL";
-                cmd.Parameters.Add("@vstr_acao", System.Data.SqlDbType.NVarChar).Value = "Field_Cbo";
+                cmd.Parameters.Add("@vstr_acao", System.Data.SqlDbType.NVarChar).Value = "FIELD_CBO"; 
 
                 SqlDataReader rs = cmd.ExecuteReader();
                 dadosBanco = RsToArray.CriarJSONDoDataReader(rs);
@@ -31,7 +33,7 @@ namespace PimFolhaPagamentoV2.Controllers.AutoBusca
             conexao.FecharConexao();
 
 
-            return Json(new { Status = true, dadosBanco.Resultado });
+            return Json(new { Status = true, dadosBanco.resultado });
 
         }
 

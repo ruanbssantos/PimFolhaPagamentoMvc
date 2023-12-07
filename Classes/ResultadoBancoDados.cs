@@ -4,7 +4,8 @@ namespace PimFolhaPagamentoV2.Classes
 {
     public class ResultadoBancoDados
     {
-        public List<List<Dictionary<string, string>>> Resultado { get; set; }
+        public List<List<Dictionary<string, string>>>? resultado { get; set; }
+        public bool erroSql  = false; 
     }
 
     public class RsToArray
@@ -12,7 +13,7 @@ namespace PimFolhaPagamentoV2.Classes
         public static ResultadoBancoDados CriarJSONDoDataReader(SqlDataReader reader)
         {
             ResultadoBancoDados resultadoBanco = new ResultadoBancoDados();
-            resultadoBanco.Resultado = new List<List<Dictionary<string, string>>>();
+            resultadoBanco.resultado = new List<List<Dictionary<string, string>>>();
 
             // Loop para ler cada conjunto de resultados
             do
@@ -36,9 +37,14 @@ namespace PimFolhaPagamentoV2.Classes
                     listaDeDados.Add(dadosDoBanco);
                 }
 
-                resultadoBanco.Resultado.Add(listaDeDados);
+                resultadoBanco.resultado.Add(listaDeDados);
             }
             while (reader.NextResult());
+
+            //trata erros
+            if (resultadoBanco.resultado.Count == 1) {
+                if (resultadoBanco.resultado[0][0].ContainsKey("SP_ERROR_MESSAGE") == true) resultadoBanco.erroSql = true;
+            }
 
             return resultadoBanco;
         }

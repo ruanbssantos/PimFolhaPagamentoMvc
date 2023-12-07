@@ -260,63 +260,32 @@ function fcn_validarValoresTabelaGenerica(pstr_seletorTabela) {
 
 function fcn_buscarCEP(p_campo, callback) {
     //LIMPA TODOS OS ESPAÇOS VAZIOS
-    var cepSearchFinal = p_campo.value.replace(/\s+/g, '');
+    var cepTratado = p_campo.val().replace(/\D/g, '')
     var vobj_enderecoRetorno = new Object;
 
-    if (cepSearchFinal != "") {
-        var cepTratado = cepSearchFinal.replace(/\D/g, '')
+    if (cepTratado != "") { 
+        
         if (cepTratado.length != 8) {
             p_campo.focus();
-            p_campo.value = "";
+            p_campo.val("");
             fcn_alert('Atenção!', 'O CEP deve conter obrigatoriamente 8 dígitos.');
             return false
-        } else p_campo.value = cepTratado;
-        cepSearchFinal = cepTratado;
+        } else p_campo.val(cepTratado); 
 
-        const caminhoJsonCep = "https://maps.google.com/maps/api/geocode/json?key=" + vstr_chaveGoogleMapsJs + "&amp;&address=" + cepSearchFinal + "&sensor=false";
+        const caminhoJsonCep = "https://viacep.com.br/ws/" + cepTratado + "/json/";
+
         $.getJSON(caminhoJsonCep)
             .done(function (data, status) {
-                if (status == 'success') {
-                    if (data.status == "OK") {
 
-                        //Tratamento para quando API retornar endereço
-                        if (data.results[0].address_components[1].types[0] == "route") {
-
-                            vobj_enderecoRetorno['numero_rua'] = "";
-                            vobj_enderecoRetorno['endereco'] = "";
-                            vobj_enderecoRetorno['bairro'] = "";
-                            vobj_enderecoRetorno['cidade'] = "";
-                            vobj_enderecoRetorno['UF'] = "";
-                            vobj_enderecoRetorno['cep'] = "";
-
-                            $.each(data.results[0].address_components, function (index, registro) {
-                                if (registro.types.filter(dado => dado == 'street_number').length > 0) {
-                                    vobj_enderecoRetorno['numero_rua'] = registro.long_name;
-
-                                } else if (registro.types.filter(dado => dado == 'route').length > 0) {
-                                    vobj_enderecoRetorno['endereco'] = registro.long_name;
-
-                                } else if (registro.types.filter(dado => dado == 'sublocality' || dado.indexOf('sublocality_level_') != -1).length > 0) {
-                                    vobj_enderecoRetorno['bairro'] = registro.long_name;
-
-                                } else if (registro.types.filter(dado => dado == 'administrative_area_level_1').length > 0) {
-                                    vobj_enderecoRetorno['UF'] = registro.short_name;
-
-                                } else if (registro.types.filter(dado => dado.indexOf('administrative_area_level_') != -1 || dado == 'locality').length > 0) {
-                                    vobj_enderecoRetorno['cidade'] = registro.long_name;
-
-                                } else if (registro.types.filter(dado => dado == 'postal_code').length > 0) {
-                                    vobj_enderecoRetorno['cep'] = registro.short_name.replace(/\D/g, '');
-                                }
-                            });
-
-                            vobj_enderecoRetorno['latitude'] = data.results[0].geometry.location.lat;
-                            vobj_enderecoRetorno['longitude'] = data.results[0].geometry.location.lng;
-                            fcn_buscarIdsCep(vobj_enderecoRetorno, callback);
-                        } else fcn_buscarLatLong(data.results[0].geometry.location.lat, data.results[0].geometry.location.lng, callback);
-
-                    } else {
-                        fcn_alert('Atenção!', 'CEP informado não encontrado.');
+                if (status == 'success' && data.erro != true) {
+                    if (!$.isEmptyObject(data))
+                    {
+                        vobj_enderecoRetorno["cep"] = data.cep.replace(/\D/g, '');
+                        vobj_enderecoRetorno["logradouro"] = data.logradouro;
+                        vobj_enderecoRetorno["estado"] = data.uf;
+                        vobj_enderecoRetorno["cidade"] = data.localidade;
+                        vobj_enderecoRetorno["bairro"] = data.bairro;
+                        vobj_enderecoRetorno["complemento"] = data.complemento;
                         callback(vobj_enderecoRetorno);
                     }
 
@@ -332,86 +301,7 @@ function fcn_buscarCEP(p_campo, callback) {
     } else callback(vobj_enderecoRetorno);
 
 }
-
-function fcn_buscarLatLong(pstr_lat, pstr_long, callback) {
-    var vobj_enderecoRetorno = new Object;
-
-    if (pstr_lat != "" && pstr_long != "") {
-
-        const caminhoJsonLatLong = "https://maps.google.com/maps/api/geocode/json?key=" + vstr_chaveGoogleMapsJs + "&amp;&latlng=" + pstr_lat + "," + pstr_long;
-
-        $.getJSON(caminhoJsonLatLong)
-            .done(function (data, status) {
-                if (status == 'success') {
-                    if (data.status == "OK") {
-                        vobj_enderecoRetorno['numero_rua'] = "";
-                        vobj_enderecoRetorno['endereco'] = "";
-                        vobj_enderecoRetorno['bairro'] = "";
-                        vobj_enderecoRetorno['cidade'] = "";
-                        vobj_enderecoRetorno['UF'] = "";
-                        vobj_enderecoRetorno['cep'] = "";
-
-                        $.each(data.results[0].address_components, function (index, registro) {
-                            if (registro.types.filter(dado => dado == 'street_number').length > 0) {
-                                vobj_enderecoRetorno['numero_rua'] = registro.long_name;
-
-                            } else if (registro.types.filter(dado => dado == 'route').length > 0) {
-                                vobj_enderecoRetorno['endereco'] = registro.long_name;
-
-                            } else if (registro.types.filter(dado => dado == 'sublocality' || dado.indexOf('sublocality_level_') != -1).length > 0) {
-                                vobj_enderecoRetorno['bairro'] = registro.long_name;
-
-                            } else if (registro.types.filter(dado => dado == 'administrative_area_level_1').length > 0) {
-                                vobj_enderecoRetorno['UF'] = registro.short_name;
-
-                            } else if (registro.types.filter(dado => dado.indexOf('administrative_area_level_') != -1 || dado == 'locality').length > 0) {
-                                vobj_enderecoRetorno['cidade'] = registro.long_name;
-
-                            } else if (registro.types.filter(dado => dado == 'postal_code').length > 0) {
-                                vobj_enderecoRetorno['cep'] = registro.short_name.replace(/\D/g, '');
-                            }
-                        });
-
-                        vobj_enderecoRetorno['latitude'] = data.results[0].geometry.location.lat;
-                        vobj_enderecoRetorno['longitude'] = data.results[0].geometry.location.lng;
-                        fcn_buscarIdsCep(vobj_enderecoRetorno, callback);
-                    } else {
-                        fcn_alert('Atenção!', 'Localização informada não encontrada.');
-                        callback(vobj_enderecoRetorno);
-                    }
-
-
-                } else {
-                    fcn_alert('Atenção!', 'Localização informada não encontrada.');
-                    callback(vobj_enderecoRetorno);
-                }
-
-            }).fail(function () {
-                fcn_alert('Atenção!', 'Ocorreu um erro ao buscar a localização informada. Por favor, entre em contato com o administrador do sistema.');
-                callback(vobj_enderecoRetorno);
-            });
-
-    } else callback(vobj_enderecoRetorno);
-
-}
-
-function fcn_buscarEndereco(p_seletoCampo, callback) {
-
-    var geocoder = new google.maps.Geocoder();
-    geocoder.geocode({ address: $(p_seletoCampo).val() }, function (results, status) {
-
-        if (status == google.maps.GeocoderStatus.OK) {
-
-            lat = results[0].geometry.location.lat();
-            lng = results[0].geometry.location.lng();
-
-            fcn_buscarLatLong(lat, lng, callback);
-
-        } else fcn_alert('Atenção!', 'Endereço informado não encontrado.');
-
-    });
-}
-
+ 
 function fcn_buscarIdsCep(pobj_enderecoRetorno, callback) {
     $.ajax({
         type: "POST",
@@ -558,62 +448,7 @@ function fcn_limparNomeArquivo(input) {
 
     return output;
 }
-
-function fcn_upload(campo) {
-
-    if (!fcn_validaTipoArquivo(campo)) return false;
-
-    var pobj;
-    if (campo.files.length > 0) {
-
-        if ($(campo).data('caminho')) {
-            vstr_caminho = $(campo).data('caminho')
-        } else {
-            fcn_alert('Error!', 'Caminho não definido.')
-            return false;
-        }
-
-        var formData = new FormData();
-        formData.append("caminho", vstr_caminho);
-
-        const files = campo.files;
-        for (let i = 0; i < files.length; i++) {
-            formData.append('files[]', files[i], fcn_limparNomeArquivo(files[i].name));
-        }
-
-
-        vstr_nomeArquivo = $(campo).data('nome_arquivo')
-        if (vstr_nomeArquivo) formData.append("nomeArquivo", vstr_nomeArquivo);
-
-        $.ajax({
-            url: vstr_localJs + 'includes/upload/upload.asp?hdn_operacaoUpload=1',
-            type: 'POST',
-            data: formData,
-            cache: false,
-            async: false,
-            contentType: false,
-            processData: false
-        })
-            .fail(function (data) {
-                if (data.status) pobj = data;
-                else fcn_alert('Atenção!', data.message)
-            })
-            .done(function (data) {
-                if (data.status) pobj = data;
-                else fcn_alert('Atenção!', data.message)
-
-                if ($(campo).data('campo_atrelado')) {
-                    if ($('#' + $(campo).data('campo_atrelado'))) {
-                        $('#' + $(campo).data('campo_atrelado')).val(data.arquivos[0].FinalName).trigger("val-change");
-                    }
-                }
-            });
-    }
-
-    $(campo).val('');
-    return pobj;
-}
-
+ 
 function fcn_removeObg(pstr_seletor) {
     $(pstr_seletor).find('.obgMark, .obg').not('.notRemove').removeClass('obgMark obg has-error')
 }
@@ -664,84 +499,7 @@ function fcn_validaTipoArquivo(campo) {
 
     return true;
 }
-
-function fcn_fieldUpload_gera(p_seletorAlvo) {
-    /*
-        EX: <input type="text" name="txt_perfil" id="txt_perfil" class="form-control field_autoBusca" data-field_type="field_perfil" />
-            EXPLICAÇÃO: ADD CLASSE field_autoBusca
-            data-field_type: TIPO DE CAMPO, ENVIADO PARA O AJAX SABER O QUE PROCURAR.
-    */
-
-    $(p_seletorAlvo + '.field_upload').each(function () {
-
-        //ID DO CAMPO
-        if ($(this).attr('id')) {
-            var vstr_idCampo = $(this).attr('id');
-
-            if ($('input[type=file][data-campo_atrelado=' + vstr_idCampo + ']').length > 0) {
-                var vstr_idCampoFile = $('input[type=file][data-campo_atrelado=' + vstr_idCampo + ']').prop('id');
-            } else {
-                console.log('Error! Campo file não encontrado.');
-                return false;
-            }
-        } else {
-            console.log('Error! Declaração de ID.');
-            return false;
-        }
-
-        var btn = '<button type="button" class="btn btn-outline-secondary btn_fieldUpload btn_fieldUpload_upload ml-1" title="Anexar"><i class="fas fa-cloud-upload-alt"></i></button>' +
-            '<button type="button" class="btn btn-outline-secondary btn_fieldUpload btn_fieldUpload_view ml-1 notDisabled" title="Visualizar" disabled><i class="fas fa-eye"></i></button>' +
-            '<button type="button" class="btn btn-outline-secondary btn_fieldUpload btn_fieldUpload_delete ml-1" title="Remover" disabled><i class="fas fa-times"></i></button> '
-
-        //GERA O CONTAINER;
-        $('#' + vstr_idCampo)
-            .before('<div class="container-field d-flex">')
-            .siblings('.container-field:first')
-            .append($('#' + vstr_idCampo).addClass('cursor-pointer').attr({ placeholder: 'Clique aqui para anexar...' }))
-            .append(btn);
-
-
-        //title
-        if ($('#' + vstr_idCampoFile).attr('accept')) {
-            $('label[for="' + vstr_idCampo + '"]').append('<span class="showAccept">(Arquivos válidos: ' + $('#' + vstr_idCampoFile).attr('accept') + ')</span>')
-        }
-
-        //FUNÇÕES BTN
-
-        //VISUALIZA ARQUIVO
-        $('#' + vstr_idCampo).siblings('button.btn_fieldUpload_view').on('click', function () {
-            window.open(vstr_localJs + $('#' + vstr_idCampoFile).data('caminho') + '/' + $('#' + vstr_idCampo).val(), '_blank')
-        })
-        //SOBE ARQUIVO - BTN
-        $('#' + vstr_idCampo).siblings('button.btn_fieldUpload_upload').on('click', function () {
-            if ($(this).hasClass('campo_disabled')) return false;
-            $('#' + vstr_idCampoFile).click();
-        })
-        //SOBE ARQUIVO - TEXT
-        $('#' + vstr_idCampo).on('click', function () {
-            if ($(this).hasClass('campo_disabled')) return false;
-            $('#' + vstr_idCampoFile).click();
-        })
-        //FCNS BTNS - VIEW E REMOVE
-        $('#' + vstr_idCampo).on('val-change', function () {
-            if ($(this).val() == '') vbln_disabled = true
-            else vbln_disabled = false
-            $(this).siblings('button.btn_fieldUpload_view, button.btn_fieldUpload_delete').prop('disabled', vbln_disabled);
-        })
-        //FCNS BTNS - REMOVE
-        $('#' + vstr_idCampo).siblings('button.btn_fieldUpload_delete').on('click', function () {
-            if ($(this).hasClass('campo_disabled')) return false;
-            $('#' + vstr_idCampo).val('').siblings('button.btn_fieldUpload_view, button.btn_fieldUpload_delete').prop('disabled', true);
-        })
-        //FCNS BTNS - REMOVE
-        $('#' + vstr_idCampo).on('disabled', function () {
-            fcn_bloquearCampos($(this).parents('.container-field')[0], 1)
-        })
-
-
-    });
-}
-
+ 
 function fcn_validaTecla(pstr_validacao, evento) {
     // onKeyPress="return validaTecla('[0]{,}', event);"
     var tecla = (window.event) ? event.keyCode : evento.which;
@@ -1181,12 +939,12 @@ function fcn_limparCampos(p_seletor) {
 
 }
 
-function fcn_gera_paginacao(p_seletor, pint_registroInicial, pint_totalRegistro, pint_qtdRegistroPagina, pobj_resultado, pbln_criarBotaoEdicao) {
+function fcn_gera_paginacao(p_config) {
     let arr_data = [];
     //PERCORRER LINHAS
 
-    if (pobj_resultado.length > 0) {
-        $.each(pobj_resultado, function (indice, registro) {
+    if (p_config.resultado.length > 0) {
+        $.each(p_config.resultado, function (indice, registro) {
 
             var registroTratado = new Object;
 
@@ -1198,61 +956,56 @@ function fcn_gera_paginacao(p_seletor, pint_registroInicial, pint_totalRegistro,
                 let vstr_campoTratado = campo;
                 let oculto = '';
                 let data = '';
+
                 if (campo.indexOf('|') > 0) {
-                    if (campo.split('|')[1].toString().toUpperCase() == 'OCULTO') oculto = 1;
                     if (campo.split('|')[1].toString().toUpperCase() == 'PK') {
                         pk = valor;
                         oculto = 1;
                     }
-                    if (campo.split('|')[1].toString().toUpperCase() == 'DATA') {
-                        data = 1;
-                        arr_data.push([campo.split('|')[0], valor]);
+                    if (campo.split('|')[1].toString().toUpperCase() == 'OCULTO') {
+                        oculto = 1;
                     }
                     vstr_campoTratado = campo.split('|')[0];
                 }
                 if (oculto != '1' && data != '1') vstr_linha += '<td class="' + vstr_campoTratado + '">' + valor + '</td>'
-
                 registroTratado[vstr_campoTratado] = valor;
 
-            })
-            //CRIA BOTÃO EDIT DEFAULT
-            vstr_linha += (pk != '' && pbln_criarBotaoEdicao == '1' ? '<td class="text-center btn_default_pag"><button type="button" class="btn btn-outline-secondary btn_edit" data-id="' + pk + '" title="Alterar"><i class="fas fa-edit"></i></button></td>' : '')
-            $(p_seletor + ' tbody').append('<tr data-id="' + pk + '">' + vstr_linha + '</tr>').find('tr:last').data('registro', registroTratado);
-            if (arr_data.length > 0) {
-                arr_data.forEach(function (e, i) {
-                    $(p_seletor + ' tbody tr:last').data(e[0], e[1])
-                })
-            }
-        });
+            });
 
-        vint_ultimoRegistro = (pint_registroInicial + (+pint_qtdRegistroPagina));
-        vint_paginaAtual = Math.ceil(pint_registroInicial / pint_qtdRegistroPagina);
-        vint_paginaFinal = Math.ceil(pint_totalRegistro / pint_qtdRegistroPagina);
+            //CRIA BOTÃO EDIT DEFAULT
+            vstr_linha += (pk != '' && p_config.fl_criarBotaoEdicao == '1' ? '<td class="text-center btn_default_pag"><button type="button" class="btn btn-outline-secondary btn_edit" data-id="' + pk + '" title="Alterar"><i class="fas fa-edit"></i></button></td>' : '')
+            $(p_config.seletor_tb + ' tbody').append('<tr data-id="' + pk + '">' + vstr_linha + '</tr>').find('tr:last').data('registro', registroTratado);
+
+        }); 
+
+        vint_ultimoRegistro = (p_config.nr_registroInicial + (+p_config.nr_registroPagina));
+        vint_paginaAtual = Math.ceil(p_config.nr_registroInicial / p_config.nr_registroPagina);
+        vint_paginaFinal = Math.ceil(p_config.nr_totalRegistro / p_config.nr_registroPagina);
         vint_rangeBtn = 1;
-        $(p_seletor + ' .menssagem').html('Mostrando registros de ' + pint_registroInicial + ' até ' + (pint_totalRegistro > (vint_ultimoRegistro - 1) ? (vint_ultimoRegistro - 1) : pint_totalRegistro) + ', de ' + pint_totalRegistro);
+        $(p_config.seletor_tb + ' .menssagem').html('Mostrando registros de ' + p_config.nr_registroInicial + ' até ' + (p_config.nr_totalRegistro > (vint_ultimoRegistro - 1) ? (vint_ultimoRegistro - 1) : p_config.nr_totalRegistro) + ', de ' + p_config.nr_totalRegistro);
 
         //INCLUI BOTÃO COM PÁGINA ATUAL
-        $(p_seletor + ' .paginacao').html('<input name="btn_paginas" id="btn_pagina_' + vint_paginaAtual + '" class="btn btn_paginas btn-success" type="button" data-value="' + vint_paginaAtual + '" value="' + vint_paginaAtual + '">');
+        $(p_config.seletor_tb + ' .paginacao').html('<input name="btn_paginas" id="btn_pagina_' + vint_paginaAtual + '" class="btn btn_paginas btn-success" type="button" data-value="' + vint_paginaAtual + '" value="' + vint_paginaAtual + '">');
 
         //CRIA BOTÕES ANTES E DEPOIS DA PÁGINA ATUAL (SOMANDO E SUBTRAINDO)
         if (vint_rangeBtn > 0) {
             for (let i = 1; i <= vint_rangeBtn; i++) {
-                $(p_seletor + ' .paginacao').prepend('<input name="btn_paginas" id="btn_pagina_' + (vint_paginaAtual - i) + '" class="btn btn_paginas btn-secondary" type="button" data-value="' + (vint_paginaAtual - i) + '" value="' + (vint_paginaAtual - i) + '">');
-                $(p_seletor + ' .paginacao').append('<input name="btn_paginas" id="btn_pagina_' + (vint_paginaAtual + i) + '" class="btn btn_paginas btn-secondary" type="button" data-value="' + (vint_paginaAtual + i) + '" value="' + (vint_paginaAtual + i) + '">');
+                $(p_config.seletor_tb + ' .paginacao').prepend('<input name="btn_paginas" id="btn_pagina_' + (vint_paginaAtual - i) + '" class="btn btn_paginas btn-secondary" type="button" data-value="' + (vint_paginaAtual - i) + '" value="' + (vint_paginaAtual - i) + '">');
+                $(p_config.seletor_tb + ' .paginacao').append('<input name="btn_paginas" id="btn_pagina_' + (vint_paginaAtual + i) + '" class="btn btn_paginas btn-secondary" type="button" data-value="' + (vint_paginaAtual + i) + '" value="' + (vint_paginaAtual + i) + '">');
             }
         }
 
         //REMOVE BTNS MAIORES QUE A PÁGINA FINAL E MENOR QUE A PÁGINA ATUAL
-        $(p_seletor + ' .btn_paginas').filter(function () { return $(this).val() < 1 || $(this).val() > vint_paginaFinal }).remove();
+        $(p_config.seletor_tb + ' .btn_paginas').filter(function () { return $(this).val() < 1 || $(this).val() > vint_paginaFinal }).remove();
 
         //ADD PÁGINA INCIAL E FINAL
         if (vint_paginaFinal > 5) {
-            $(p_seletor + ' .paginacao').prepend('<input name="btn_paginas" id="btn_pagina_primeiro" class="btn btn_paginas btn-secondary" type="button" data-value="1" value="Primeiro">');
-            $(p_seletor + ' .paginacao').append('<input name="btn_paginas" id="btn_pagina_ultimo" class="btn btn_paginas btn-secondary"  data-value="' + vint_paginaFinal + '" type="button" value="Último">');
+            $(p_config.seletor_tb + ' .paginacao').prepend('<input name="btn_paginas" id="btn_pagina_primeiro" class="btn btn_paginas btn-secondary" type="button" data-value="1" value="Primeiro">');
+            $(p_config.seletor_tb + ' .paginacao').append('<input name="btn_paginas" id="btn_pagina_ultimo" class="btn btn_paginas btn-secondary"  data-value="' + vint_paginaFinal + '" type="button" value="Último">');
         }
 
     } else {
-        $(p_seletor + ' tbody').html('<tr class="tr_remove text-center"><td  colspan="100%">Nenhum registro encontrado!</td></tr>');
+        $(p_config.seletor_tb + ' tbody').html('<tr class="tr_remove text-center"><td  colspan="100%">Nenhum registro encontrado!</td></tr>');
     }
     
 }
@@ -1587,27 +1340,6 @@ function fcn_validarCNPJ(p_campo) {
 
     return true;
 }
-
-
-//------------------------------------------------------
-// Usado para pegar a lat/lng
-//------------------------------------------------------
-var getJSON = function (url, callback) {
-
-    var xhr = new XMLHttpRequest();
-    xhr.open('GET', url, true);
-    xhr.responseType = 'json';
-    xhr.onload = function () {
-        var status = xhr.status;
-
-        if (status == 200) {
-            callback(null, xhr.response);
-        } else {
-            callback(status);
-        }
-    };
-    xhr.send();
-};
 
 //------------------------------------------------------
 // Funções para lidar com valores de moeda

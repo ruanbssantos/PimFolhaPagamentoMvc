@@ -7,12 +7,23 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Remove="wwwroot\js\Cbo\Consulta.js" />
+    <Content Remove="wwwroot\js\Cbo\Formulario.js" />
+    <Content Remove="wwwroot\js\Funcionario\Consulta.js" />
+    <Content Remove="wwwroot\js\Funcionario\Formulario.js" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.AspNet.Mvc" Version="5.3.0" />
     <PackageReference Include="Microsoft.AspNetCore.Http" Version="2.2.2" />
     <PackageReference Include="System.Data.SqlClient" Version="4.8.5" />
   </ItemGroup>
 
   <ItemGroup>
+    <None Include="wwwroot\js\Cbo\Consulta.js" />
+    <None Include="wwwroot\js\Cbo\Formulario.js" />
+    <None Include="wwwroot\js\Funcionario\Consulta.js" />
+    <None Include="wwwroot\js\Funcionario\Formulario.js" />
     <None Include="wwwroot\js\Empresa\Consulta.js" />
     <None Include="wwwroot\js\Empresa\Formulario.js" />
   </ItemGroup>

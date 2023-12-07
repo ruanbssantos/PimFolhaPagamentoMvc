@@ -1,10 +1,14 @@
 ﻿
-const vstr_local = window.location.origin + '/Empresa/';
+const vstr_local = window.location.origin + '/Funcionario/';
 
 $(document).ready(function () { 
-    $('#txt_cnpj').on('blur', function () {
-        fcn_validarDocumentoPessoa($(this), 'cnpj');
+    $('#txt_cep').on('change', function () {
+        fcn_buscarCEP($(this), fcn_preencheCep);
     }); 
+    $('#txt_cpf').on('blur', function () {
+        fcn_validarDocumentoPessoa($(this), 'cpf');
+    }); 
+
     $('#btn_gravar').on('click', function () { fcn_gravar(); });
     $('#btn_voltar').on('click', function () {
         window.open(vstr_local + 'Consulta', '_self');
@@ -14,6 +18,16 @@ $(document).ready(function () {
     else fcn_removerLoading();
 });
 
+function fcn_preencheCep(p_registro) {
+    if (!$.isEmptyObject(p_registro)) {
+        $('#txt_endereco').val(p_registro.logradouro);
+        $('#txt_uf').val(p_registro.estado);
+        $('#txt_cidade').val(p_registro.cidade);
+        $('#txt_bairro').val(p_registro.bairro);
+        $('#txt_complemento').val(p_registro.complemento);
+    }
+}
+
 function fcn_removerLoading() {
     setTimeout(function () {
         $('.container-formulario').removeClass('loading');
@@ -22,7 +36,7 @@ function fcn_removerLoading() {
 
 function fcn_gravar() {
 
-    if (fcn_validaCampos('.container-formulario')) {
+    if (fcn_validaCampos('.container-formulario') || 1==1) {
         $('#btn_gravar').prop('disabled', true);
         fcn_confirmSN("Atenção", 'Deseja realmente continuar?').done(function () {
             $.ajax({

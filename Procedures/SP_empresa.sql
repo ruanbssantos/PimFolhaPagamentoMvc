@@ -28,13 +28,14 @@ BEGIN
 	Declare @vstr_cmd As nvarchar(max)
 
     BEGIN TRY
-		IF @vstr_tipoOper = 'INS'
+		IF @vstr_tipoOper = 'SEL'
 		BEGIN
 			IF @vstr_acao = 'CARREGAR_EMPRESA'
 			BEGIN 
 				set @vstr_cmd = ' 
 					SELECT
 						ROW_NUMBER() OVER (ORDER BY razaoSocial ASC) AS nr_registro
+						,dbo.MascaraCPFCNPJ(cnpj) AS cnpj
 						,razaoSocial
 						,nomeFantasia
 						,CASE
@@ -43,7 +44,7 @@ BEGIN
 							WHEN 0 THEN ''Inativo''
 						END ds_status	
 
-   						,id_empresa AS [id_banner|pk]
+   						,id_empresa AS [id_empresa|PK]
 
 						INTO #TEMP_BUSCA
 					FROM
@@ -51,12 +52,17 @@ BEGIN
 					WHERE
 						1=1'
 		
-				--if LEN(@fl_status) > 0
-				--	set @vstr_cmd += ' AND fl_status =' + CONVERT(varchar,@fl_status) 
+				if LEN(@status_fl) > 0
+					set @vstr_cmd += ' AND status_fl =' + CONVERT(varchar,@status_fl) 
 
-				--if LEN(@ds_banner) > 0
-				--	set @vstr_cmd += ' AND ds_banner like ''%' + CONVERT(varchar,@ds_banner) + '%'''
+				if LEN(@razaoSocial) > 0
+					set @vstr_cmd += ' AND razaoSocial like ''%' + CONVERT(varchar,@razaoSocial) + '%'''
 
+				if LEN(@nomeFantasia) > 0
+					set @vstr_cmd += ' AND nomeFantasia like ''%' + CONVERT(varchar,@nomeFantasia) + '%'''
+				
+				if LEN(@cnpj) > 0
+					set @vstr_cmd += ' AND cnpj like ''%' + CONVERT(varchar,@cnpj) + '%'''
 
 				--GERA PAGINAÇÃO
    				set @vstr_cmd += '
@@ -76,7 +82,20 @@ BEGIN
 				execute (@vstr_cmd)
 			END
 
+			IF @vstr_acao = 'CARREGAR_CAMPOS_EMPRESA'
+			BEGIN
+				SELECT
+					cnpj AS txt_cnpj
+					,nomeFantasia AS txt_nomeFantasia
+					,razaoSocial AS txt_razaoSocial
+					,CONVERT(tinyint,status_fl) AS cmb_status
+				FROM
+					empresa
+				WHERE
+					id_empresa = @id_empresa
+			END 
 		END
+
 		IF @vstr_tipoOper = 'INS'
 		BEGIN
 			IF @vstr_acao = 'GRAVAR_EMPRESA'
@@ -91,6 +110,7 @@ BEGIN
 						cnpj					= @cnpj
 						,razaoSocial			= @razaoSocial
 						,nomeFantasia 			= @nomeFantasia 
+						,status_fl	 			= @status_fl
 						,id_ultimoUsuarioAcao	= @id_usuarioAcao
 						,dt_ultimaAcao			= GETDATE()
 					WHERE
@@ -111,7 +131,11 @@ BEGIN
 						,@id_usuarioAcao
 						,@status_fl
 					)
+
+					SET @id_empresa = SCOPE_IDENTITY();
 				END 
+
+				SELECT @id_empresa AS id_empresa;
 			END
 		END
 

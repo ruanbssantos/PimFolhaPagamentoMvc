@@ -1,16 +1,11 @@
 ﻿
-const vstr_local = window.location.origin + '/Empresa/';
-
+const vstr_local = window.location.origin + '/Cbo/';
 $(document).ready(function () { 
-    $('#txt_cnpj').on('blur', function () {
-        fcn_validarDocumentoPessoa($(this), 'cnpj');
-    }); 
     $('#btn_gravar').on('click', function () { fcn_gravar(); });
     $('#btn_voltar').on('click', function () {
         window.open(vstr_local + 'Consulta', '_self');
-    });
-
-    if ($('#hdn_idEmpresa').val()) fcn_carregarCampos();
+    }); 
+    if ($('#hdn_idCbo').val()) fcn_carregarCampos();
     else fcn_removerLoading();
 });
 
@@ -35,7 +30,7 @@ function fcn_gravar() {
                 if (data.message) fcn_alert("Atenção!", data.message);
 
                 if (data.success) {
-                    if ($('#hdn_idEmpresa').val()) fcn_carregarCampos();
+                    if ($('#hdn_idCbo').val()) fcn_carregarCampos();
                     else fcn_limparCampos('.container-formulario');
                 }
             }).always(function () {
@@ -54,7 +49,7 @@ function fcn_carregarCampos() {
 
     fcn_limparCampos('.container-formulario');
 
-    if ($('#hdn_idEmpresa').val()) {
+    if ($('#hdn_idCbo').val()) {
         $('.container-formulario').addClass('loading'); 
         $.ajax({
             type: "POST",
@@ -62,7 +57,7 @@ function fcn_carregarCampos() {
             url: vstr_local + 'CarregarCampos',
             cache: false,
             data: {
-                id_empresa: $('#hdn_idEmpresa').val()
+                id_cbo: $('#hdn_idCbo').val()
             }
         }).done(function (data) {
             if (data.success) { 

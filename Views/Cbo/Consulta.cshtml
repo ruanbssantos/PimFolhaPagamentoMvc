@@ -1,4 +1,6 @@
-﻿<div class="container-fluid px-4 mt-4 mb-4">
+﻿<script src="~/js/Cbo/Consulta.js" asp-append-version="true"></script>
+
+<div class="container-fluid px-4 mt-4 mb-4">
     <div class="row justify-content-between">
         <div class="col-auto">
             <div class="row h-100 no-gutters align-items-center">
@@ -23,7 +25,7 @@
 <div class="container-fluid px-4" id="containerBody">
     <div class="row">
         <div class="col-12">
-            <div class="container-formulario shadow p-3 p-md-4">
+            <form action="" method="post" id="frm_consulta" class="container-formulario shadow p-3 p-md-4">
                 <div class="row">
                     <div class="col-12 mb-4">
                         <div class="card">
@@ -34,8 +36,8 @@
                                 <div class="row">
                                     <div class="col-12 col-sm-12 col-lg-auto">
                                         <div class="form-group">
-                                            <label for="txt_codigoCbo">CBO</label>
-                                            <input type="text" class="form-control" name="txt_codigoCbo" id="txt_codigoCbo" maxlength="10" />
+                                            <label for="txt_codigo">Código</label>
+                                            <input type="text" class="form-control" name="txt_codigo" id="txt_codigo" maxlength="50" />
                                         </div>
                                     </div>
                                     <div class="col-12 col-sm-12 col-lg">
@@ -43,10 +45,17 @@
                                             <label for="txt_cbo">Título</label>
                                             <input type="text" class="form-control" name="txt_titulo" id="txt_titulo" maxlength="10" />
                                         </div>
-                                    </div> 
+                                    </div>
+                                    <div class="col-12 col-sm-12 col-lg-auto">
+                                        <label for="cmb_status">Status</label>
+                                        <select class="form-control" name="cmb_status" id="cmb_status">
+                                            <option value="">Selecione</option>
+                                            <option value="1">Ativo</option>
+                                            <option value="0">Inativo</option>
+                                        </select>
+                                    </div>
                                     <div class="col-12 my-4 text-center">
-                                        <input type="button" class="btn btn-success" name="btn_buscar" id="btn_buscar" value="Buscar" title="Buscar">
-                                        @*<input type="button" class="btn btn-secondary" name="btn_voltar" id="btn_voltar" value="Voltar" title="Voltar" />*@
+                                        <input type="button" class="btn btn-success" name="btn_buscar" id="btn_buscar" value="Buscar" title="Buscar"> 
                                     </div>
                                 </div>
                             </div>
@@ -78,8 +87,9 @@
                                                 <thead>
                                                     <tr>
                                                         <th>#</th> 
-                                                        <th>CBO</th>
+                                                        <th>Código</th>
                                                         <th>Título</th>
+                                                        <th>Status</th>
                                                         <th></th>
                                                     </tr>
                                                 </thead>
@@ -102,22 +112,7 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </form>
         </div>
     </div>
-</div>
-
-
-
-<script>
-
-    $(document).ready(function () {
-
-        $('.btn_novo').on('click', function () { window.open('Cadastro', '_self'); });
-
-        dados = []
-
-        fcn_gera_paginacao('#tb_busca', 0, 0, $('#cmb_qtdRegistro').val(), dados, 1)
-        
-    });
-</script>
+</div> 

@@ -264,6 +264,12 @@ a:hover {
 /******************************************************************************************************/
 /*FORMULÁRIOS*/
 /******************************************************************************************************/
+.text-right{
+    text-align: right;
+}
+.text-left {
+    text-align: left;
+}
 .container-field {
     align-items: center;
 }
@@ -342,4 +348,39 @@ label.obgMark::after {
     /*width: 5px;*/
     background-color: #666666;
     /*-webkit-border-radius: 3px;*/
+}
+
+/******************************************************************************************************/
+/*LOAGIND*/
+/******************************************************************************************************/
+.loading {
+    background-color: white;
+    height: auto;
+    /*order-radius: 10px;*/
+    overflow: hidden;
+    position: relative;
+}
+.loading * {
+    visibility: hidden;
+}
+.loading::before {
+    content: "";
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: linear-gradient( to right, rgba(255, 255, 255, 0) 0%, rgb(208, 208, 208) 45%, rgb(255,255,255, 0) 100% );    
+    animation: post-load 1.5s ease-in-out infinite;
+}
+
+@keyframes post-load {
+    0% {
+        transform: translateX(-100%);
+    }
+
+    100% {
+        transform: translateX(100%);
+    }
 }
