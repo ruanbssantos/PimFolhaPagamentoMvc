@@ -25,7 +25,12 @@ namespace PimFolhaPagamentoV2.Controllers.Holerite
         {
             try
             {
+                if (string.IsNullOrEmpty(id))
+                {
+                    return NotFound(); // Retorna uma página 404 (NotFound)
+                }
 
+                ViewBag.Title = vstr_title;
                 HoleriteDados holerite = new HoleriteDados();
                 ResultadoBancoDados dadosBanco;
 
@@ -53,7 +58,7 @@ namespace PimFolhaPagamentoV2.Controllers.Holerite
                 }
                 else
                 {
-                    if (dadosBanco.resultado.Count > 0)
+                    if (dadosBanco.resultado[0].Count > 0)
                     {
                         var dadosHolerite = dadosBanco.resultado[0][0];
                         var dadosTotaisHolerite = dadosBanco.resultado[1][0];
@@ -62,22 +67,24 @@ namespace PimFolhaPagamentoV2.Controllers.Holerite
 
                         holerite.nomeEmpresa = dadosHolerite["empresa"].ToString();
                         holerite.cnpjEmpresa = dadosHolerite["cnpj"].ToString();
-                        holerite.mesAnoReferencia  = dadosHolerite["ds_referencia"].ToString();
-                        holerite.nomeFuncionario  = dadosHolerite["nomeFuncionario"].ToString();
-                        holerite.codigoCBO  = dadosHolerite["codigoCBO"].ToString();
-                        holerite.tituloCBO  = dadosHolerite["tituloCBO"].ToString();
-                        holerite.dt_admissao  = dadosHolerite["dt_admissao"].ToString();
-                        holerite.nr_salarioBase  = dadosHolerite["nr_salarioBruto"].ToString();
-                        holerite.nr_baseINSS  = dadosHolerite["nr_baseINSS"].ToString();
-                        holerite.nr_baseFGTS  = dadosHolerite["nr_baseFGTS"].ToString();
-                        holerite.nr_valorFGTS  = dadosHolerite["nr_valorFGTS"].ToString();
-                        holerite.nr_valorIRRF  = dadosHolerite["nr_baseIRRF"].ToString();
-                        holerite.nr_totalProvento  = dadosTotaisHolerite["nr_totalProvento"].ToString();
+                        holerite.mesAnoReferencia = dadosHolerite["ds_referencia"].ToString();
+                        holerite.nomeFuncionario = dadosHolerite["nomeFuncionario"].ToString();
+                        holerite.codigoCBO = dadosHolerite["codigoCBO"].ToString();
+                        holerite.tituloCBO = dadosHolerite["tituloCBO"].ToString();
+                        holerite.dt_admissao = dadosHolerite["dt_admissao"].ToString();
+                        holerite.nr_salarioBase = dadosHolerite["nr_salarioBruto"].ToString();
+                        holerite.nr_baseINSS = dadosHolerite["nr_baseINSS"].ToString();
+                        holerite.nr_baseFGTS = dadosHolerite["nr_baseFGTS"].ToString();
+                        holerite.nr_valorFGTS = dadosHolerite["nr_valorFGTS"].ToString();
+                        holerite.nr_valorIRRF = dadosHolerite["nr_baseIRRF"].ToString();
+                        holerite.nr_totalProvento = dadosTotaisHolerite["nr_totalProvento"].ToString();
                         holerite.nr_totalDesconto = dadosTotaisHolerite["nr_totalDesconto"].ToString();
                         holerite.nr_salarioLiquido = dadosTotaisHolerite["nr_salarioLiquido"].ToString();
 
-                        foreach (var item in dadosLancamento) {
-                            HoleriteLancamentos holeriteLancamentos = new HoleriteLancamentos {
+                        foreach (var item in dadosLancamento)
+                        {
+                            HoleriteLancamentos holeriteLancamentos = new HoleriteLancamentos
+                            {
                                 descricao = item["descricao"].ToString(),
                                 referencia = item["nr_referencia"].ToString(),
                                 provento = item["provento"].ToString(),
@@ -87,6 +94,10 @@ namespace PimFolhaPagamentoV2.Controllers.Holerite
                             holerite.lancamentos.Add(holeriteLancamentos);
                         }
 
+                    }
+                    else 
+                    {
+                        return NotFound();
                     }
 
                 }
@@ -241,11 +252,11 @@ namespace PimFolhaPagamentoV2.Controllers.Holerite
                     cmd.Parameters.Add("@top", System.Data.SqlDbType.NVarChar).Value = vint_qtdPagina;
                     cmd.Parameters.Add("@nr_registroInicial", System.Data.SqlDbType.NVarChar).Value = vint_registroInicial;
 
-                    //cmd.Parameters.Add("@cpf", System.Data.SqlDbType.VarChar).Value = Function.LimparString(dados["txt_cpf"].ToString());
-                    //cmd.Parameters.Add("@nome", System.Data.SqlDbType.VarChar).Value = Function.LimparString(dados["txt_nome"].ToString());
-                    //cmd.Parameters.Add("@email", System.Data.SqlDbType.VarChar).Value = Function.LimparString(dados["txt_email"].ToString());
-                    //cmd.Parameters.Add("@status_fl", System.Data.SqlDbType.VarChar).Value = Function.LimparString(dados["cmb_status"].ToString());
-                    //cmd.Parameters.Add("@admin_fl", System.Data.SqlDbType.VarChar).Value = Function.LimparString(dados["cmb_admin"].ToString());
+                    cmd.Parameters.Add("@id_empresa", System.Data.SqlDbType.VarChar).Value = Function.LimparString(dados["hdn_txt_empresa"].ToString());
+                    cmd.Parameters.Add("@id_funcionario", System.Data.SqlDbType.VarChar).Value = Function.LimparString(dados["hdn_txt_funcionario"].ToString());
+                    cmd.Parameters.Add("@id_contrato", System.Data.SqlDbType.VarChar).Value = Function.LimparString(dados["hdn_txt_contrato"].ToString());
+                    cmd.Parameters.Add("@nr_mes", System.Data.SqlDbType.VarChar).Value = Function.LimparString(dados["cmb_mes"].ToString());
+                    cmd.Parameters.Add("@nr_ano", System.Data.SqlDbType.VarChar).Value = Function.LimparString(dados["cmb_ano"].ToString());
 
                     SqlDataReader rs = cmd.ExecuteReader();
                     dadosBanco = RsToArray.CriarJSONDoDataReader(rs);

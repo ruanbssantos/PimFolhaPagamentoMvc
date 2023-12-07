@@ -63,20 +63,20 @@ BEGIN
 					WHERE
 						1=1'
 						
-				--if LEN(@cpf) > 0
-				--	set @vstr_cmd += ' AND cpf like ''%' + CONVERT(varchar,@cpf) + '%'''
+				if LEN(@id_empresa) > 0
+					set @vstr_cmd += ' AND H.id_empresa =' + CONVERT(varchar,@id_empresa) 
 
-				--if LEN(@nome) > 0
-				--	set @vstr_cmd += ' AND nome like ''%' + CONVERT(varchar,@nome) + '%'''
+				if LEN(@id_funcionario) > 0
+					set @vstr_cmd += ' AND H.id_funcionario =' + CONVERT(varchar,@id_funcionario) 
 
-				--if LEN(@email) > 0
-				--	set @vstr_cmd += ' AND email like ''%' + CONVERT(varchar,@email) + '%'''
-		
-				--if LEN(@status_fl) > 0
-				--	set @vstr_cmd += ' AND status_fl =' + CONVERT(varchar,@status_fl) 
+				if LEN(@id_contrato) > 0
+					set @vstr_cmd += ' AND H.id_contrato =' + CONVERT(varchar,@id_contrato) 
 
-				--if LEN(@admin_fl) > 0
-				--	set @vstr_cmd += ' AND admin_fl =' + CONVERT(varchar,@admin_fl) 
+				if LEN(@nr_mes) > 0
+					set @vstr_cmd += ' AND H.nr_mes =' + CONVERT(varchar,@nr_mes) 
+
+				if LEN(@nr_ano) > 0
+					set @vstr_cmd += ' AND H.nr_ano =' + CONVERT(varchar,@nr_ano) 
 
 				--GERA PAGINAÇÃO
    				set @vstr_cmd += '

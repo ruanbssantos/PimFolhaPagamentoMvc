@@ -1,6 +1,23 @@
 ﻿const vstr_local = window.location.origin + '/Holerite/';
 $(document).ready(function () {
 
+    $('#txt_empresa').on('change', function () {
+        $('#txt_funcionario').trigger('limparCampo');
+        $('#txt_funcionario').trigger('change');
+    });
+
+    $('#txt_funcionario').data('parametros', {
+        id_empresa: { cmd: '($("#hdn_txt_empresa").val()?$("#hdn_txt_empresa").val():-1)' }
+    }).on('change', function () {
+        $('#txt_contrato').trigger('limparCampo');
+    });
+
+    $('#txt_contrato').data('parametros', {
+        fl_status: 1,
+        id_empresa: { cmd: '($("#hdn_txt_empresa").val()?$("#hdn_txt_empresa").val():-1)' },
+        id_funcionario: { cmd: '($("#hdn_txt_funcionario").val()?$("#hdn_txt_funcionario").val():-1)' }
+    });
+
     $('.btn_novo').on('click', function () { window.open('Cadastro', '_self'); });
       
     fcn_carregaHolerite();
@@ -45,6 +62,10 @@ function fcn_carregaHolerite() {
                 }
                 fcn_gera_paginacao(paginacao)
 
+                $('#tb_busca tr > td.btn_default_pag').map(function () {
+                    $(this).append('<button type="button" class="btn btn-outline-secondary btn_view" data-id="1" title="Visualizar"><i class="fas fa-eye"></i></button>')
+                })
+
                 //TRATAMENTOS
                 $('#tb_busca .btn_paginas').on('click', function () {
                     $('#tb_busca .btn_paginas').removeClass('btn-success');
@@ -58,6 +79,15 @@ function fcn_carregaHolerite() {
                         $('#frm_consulta').prop({
                             action: vstr_local + 'Alteracao/' + $(this).data('id'),
                             target: '_self'
+                        }).submit();
+                    }
+                }); 
+
+                $('#tb_busca .btn_default_pag .btn_view').on('click', function () {
+                    if ($(this).data('id')) {
+                        $('#frm_consulta').prop({
+                            action: vstr_local + 'Visualizar/' + $(this).data('id'),
+                            target: '_blank'
                         }).submit();
                     }
                 }); 

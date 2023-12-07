@@ -248,12 +248,16 @@ a:hover {
 .cmb_qtdPaginacao {
     max-width: 76px;
 }
+
+td.btn_default_pag > button:not(:last-child) {
+    margin-right:5px;
+}
 /******************************************************************************************************/
 /*TABELAS*/
 /******************************************************************************************************/
 .border-table {
     border: 1px solid #e3e6f0;
-    border-collapse: collapse; /* Combinação de bordas */ 
+    border-collapse: collapse; /* Combinação de bordas */
 }
 .table {
     width: 100%;

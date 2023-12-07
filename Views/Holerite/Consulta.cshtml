@@ -1,4 +1,11 @@
-﻿<script src="~/js/Holerite/Consulta.js" asp-append-version="true"></script>
+﻿@{
+    // Obtendo o ano atual
+    int anoAtual = DateTime.Now.Year;
+    int anoMinimo = anoAtual - 20;
+    int anoMaximo = anoAtual + 10;
+}
+
+<script src="~/js/Holerite/Consulta.js" asp-append-version="true"></script>
 
 <div class="container-fluid px-4 mt-4 mb-4">
     <div class="row justify-content-between">
@@ -34,16 +41,22 @@
                             </div>
                             <div class="card-body">
                                 <div class="row">
-                                    <div class="col-12 col-sm-12 col-lg-12 col-xl-6 col-xxl-12">
+                                    <div class="col-12 col-sm-12 col-lg-12 col-xl-6 col-xxl-6">
                                         <div class="form-group">
                                             <label for="txt_empresa">Empresa</label>
-                                            <input type="text" class="form-control obg field_autoBusca" name="txt_empresa" id="txt_empresa" data-field_type="Field_Cbo" />
+                                            <input type="text" class="form-control field_autoBusca" name="txt_empresa" id="txt_empresa" data-field_type="Field_empresa" />
                                         </div>
                                     </div>
-                                    <div class="col-12 col-sm-12 col-lg-12 col-xl-6 col-xxl">
+                                    <div class="col-12 col-sm-12 col-lg-12 col-xl-6 col-xxl-6">
                                         <div class="form-group">
                                             <label for="txt_funcionario">Funcionário</label>
-                                            <input type="text" class="form-control obg field_autoBusca" name="txt_funcionario" id="txt_funcionario" data-field_type="Field_Cbo" />
+                                            <input type="text" class="form-control field_autoBusca" name="txt_funcionario" id="txt_funcionario" data-field_type="Field_funcionario" />
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-sm-12 col-lg-12 col-xl col-xxl">
+                                        <div class="form-group">
+                                            <label for="txt_contrato">Contrato</label>
+                                            <input type="text" class="form-control field_autoBusca" name="txt_contrato" id="txt_contrato" data-field_type="Field_contrato" />
                                         </div>
                                     </div>
                                     <div class="col-12 col-sm-12 col-lg-12 col-xl-6 col-xxl-auto">
@@ -51,6 +64,10 @@
                                             <label for="cmb_mes">Mês</label>
                                             <select class="form-select obg" name="cmb_mes" id="cmb_mes">
                                                 <option value="">Selecione</option>
+                                                @for (int mes = 1; mes <= 12; mes++)
+                                                {
+                                                    <option value="@mes">@mes</option>
+                                                }
                                             </select>
                                         </div>
                                     </div>
@@ -59,6 +76,10 @@
                                             <label for="cmb_ano">Ano</label>
                                             <select class="form-select obg" name="cmb_ano" id="cmb_ano">
                                                 <option value="">Selecione</option>
+                                                @for (int ano = anoMinimo; ano <= anoMaximo; ano++)
+                                                {
+                                                    <option value="@ano">@ano</option>
+                                                }
                                             </select>
                                         </div>
                                     </div>
