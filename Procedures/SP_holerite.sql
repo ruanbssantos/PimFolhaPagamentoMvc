@@ -140,6 +140,69 @@ BEGIN
 				ORDER BY
 					nr_ordem
 			END  
+
+			IF @vstr_acao = 'CARREGAR_HOLERITE_VISUALIZACAO'
+			BEGIN
+				SELECT
+					isnull(E.nomeFantasia,E.razaoSocial) as empresa
+					,dbo.MascaraCPFCNPJ(E.cnpj) as cnpj 
+					,FORMAT(H.nr_mes, '00') + '/' + FORMAT(H.nr_ano, '0000') as ds_referencia
+					,F.nome as nomeFuncionario
+					,cbo.codigo as codigoCBO
+					,cbo.titulo as tituloCBO
+					,CONVERT(varchar,H.dt_admissao,103) as dt_admissao
+					,FORMAT(H.nr_salarioBruto, 'N', 'pt-BR') AS nr_salarioBruto
+					,FORMAT(H.nr_baseINSS, 'N', 'pt-BR') AS nr_baseINSS
+					,FORMAT(H.nr_baseFGTS, 'N', 'pt-BR') AS nr_baseFGTS
+					,FORMAT(H.nr_valorFGTS, 'N', 'pt-BR') AS nr_valorFGTS
+					,FORMAT(H.nr_baseIRRF, 'N', 'pt-BR') AS nr_baseIRRF
+				FROM
+					holerite H
+					INNER JOIN contrato C ON H.id_contrato = C.id_contrato
+					INNER JOIN empresa E ON C.id_empresa = E.id_empresa
+					INNER JOIN funcionario F ON C.id_funcionario = F.id_funcionario
+					INNER JOIN cbo ON C.id_cbo = cbo.id_cbo
+					INNER JOIN holeriteStatus HS ON H.id_status = HS.id_status
+				WHERE
+					id_holerite = @id_holerite
+
+				SELECT
+					SUM(CASE WHEN id_tipo = 1 THEN HL.nr_valor ELSE 0 END) AS nr_totalProvento
+					,SUM(CASE WHEN id_tipo = 2 THEN HL.nr_valor ELSE 0 END) AS nr_totalDesconto 
+					INTO #TEMP_TOTAIS
+				FROM
+					holeriteLancamentos HL 
+				WHERE
+					id_holerite = @id_holerite
+
+				SELECT 
+					FORMAT(nr_totalProvento, 'N', 'pt-BR') AS nr_totalProvento
+					,FORMAT(nr_totalDesconto, 'N', 'pt-BR') AS nr_totalDesconto
+					,FORMAT((nr_totalProvento - nr_totalDesconto), 'N', 'pt-BR') AS nr_salarioLiquido
+				FROM
+					#TEMP_TOTAIS
+
+				SELECT
+					HL.descricao AS descricao
+					,isnull(FORMAT(HL.nr_referencia, 'N', 'pt-BR'),'') AS nr_referencia
+					,CASE
+						WHEN HL.id_tipo = 1 THEN FORMAT(HL.nr_valor, 'N', 'pt-BR') 
+						ELSE ''
+					END AS provento
+					,CASE
+						WHEN HL.id_tipo = 1 THEN FORMAT(HL.nr_valor, 'N', 'pt-BR') 
+						ELSE ''
+					END AS desconto
+					,FORMAT(HL.nr_valor, 'N', 'pt-BR') AS txt_valor
+				FROM
+					holeriteLancamentos HL 
+				WHERE
+					id_holerite = @id_holerite
+				ORDER BY
+					nr_ordem
+
+				DROP TABLE #TEMP_TOTAIS
+			END  
 		END
 
 		IF @vstr_tipoOper = 'INS'

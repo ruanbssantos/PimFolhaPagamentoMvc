@@ -1,6 +1,8 @@
-﻿@{
+﻿@model PimFolhaPagamentoV2.Models.Holerite.HoleriteDados;
+@{
     Layout = null; // Define que esta página não usará um layout
 }
+
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
@@ -42,15 +44,17 @@
         .tfootLancamento tr > td:not(:last-child) {
             border-right: 1px solid black
         }
+         
+
     </style>
-    <table style="width:100%;border:1px solid black;padding:10px">
+    <table style="width:100%;border:1px solid black;padding:10px;page-break-after: always">
         <tr>
-            <td>FAMA SOLUTION CONSULTORIA DE NEGÓCIOS EIRELI</td>
+            <td>@Model.nomeEmpresa</td>
             <td style="text-align:right">RECIBO DE PAGAMENTO DE SALÁRIO</td>
         </tr>
         <tr>
-            <td>CNPJ: 28.157.564/0001-51</td>
-            <td>Dezembro/2021</td>
+            <td>CNPJ: @Model.cnpjEmpresa</td>
+            <td style="text-align:right">@Model.mesAnoReferencia</td>
         </tr>
 
         <tr style="border-top:1px solid black">
@@ -58,16 +62,15 @@
                 <table style="width:100%">
                     <tr>
                         <td><b>Nome do Funcionário</b></td>
-                        <td><b>CBO</b></td>
-                        <td><b>CBO</b></td>
+                        <td><b>CBO</b></td> 
                     </tr>
                     <tr>
-                        <td>SABRINA IARITSSA DOS SANTOS</td>
-                        <td>521110</td>
+                        <td>@Model.nomeFuncionario.ToUpper()</td>
+                        <td>@Model.codigoCBO</td>
                     </tr>
                     <tr>
-                        <td>VENDEDOR INTERNO</td>
-                        <td style="text-align:right">Admissão: 19/09/2022</td>
+                        <td>@Model.tituloCBO</td>
+                        <td style="text-align:right">Admissão: @Model.dt_admissao</td>
                     </tr>
                 </table>
             </td>
@@ -85,35 +88,28 @@
                         </tr>
                     </thead>
                     <tbody class="tbodyLancamentos"> 
-                        <tr>
-                            <td>Salário Mensalista</td>
-                            <td>30,00</td>
-                            <td>4.000,00</td>
-                            <td></td>
-                        </tr>  
-                        <tr>
-                            <td>Salário Mensalista</td>
-                            <td>30,00</td>
-                            <td>4.000,00</td>
-                            <td></td>
-                        </tr>  
-                        <tr>
-                            <td>Salário Mensalista</td>
-                            <td>30,00</td>
-                            <td>4.000,00</td>
-                            <td></td>
-                        </tr>  
+                        @foreach (var item in Model.lancamentos)
+                        {
+                            <tr>
+                                <td>@item.descricao</td>
+                                <td>@item.referencia</td>
+                                <td>@item.provento</td>
+                                <td>@item.desconto</td>
+                            </tr>
+                        }
+
+                        
                     </tbody>
                     <tfoot class="tfootLancamento">
                         <tr>
                             <td colspan="2">&nbsp;</td>
                             <td style="text-align:center">
                                 <b>TOTAL DE PROVENTOS</b><br />
-                                4.000,00
+                                @Model.nr_totalProvento
                             </td>
                             <td style="text-align:center">
                                 <b>TOTAL DE DESCONTOS</b><br />
-                                2.698,45
+                                @Model.nr_totalDesconto
                             </td>
                         </tr>
                         <tr>
@@ -122,7 +118,7 @@
                                 <b>VALOR LÍQUIDO</b>
                             </td>
                             <td style="text-align:center">
-                                3.293,01
+                                @Model.nr_salarioLiquido
                             </td>
                         </tr>
                     </tfoot>
@@ -135,19 +131,139 @@
                 <table style="width:100%">
                     <tr>
                         <td style="text-align:center">
-                            Salário Base<br />4.000,00
+                            Salário Base<br />@Model.nr_salarioBase
                         </td>
                         <td style="text-align:center">
-                            Base INSS<br />4.000,00
+                            Base INSS<br />@Model.nr_baseINSS
                         </td>
                         <td style="text-align:center">
-                            Base FGTS<br />4.000,00
+                            Base FGTS<br />@Model.nr_baseFGTS
                         </td>
                         <td style="text-align:center">
-                            Valor FGTS<br />4.000,00
+                            Valor FGTS<br />@Model.nr_valorFGTS
                         </td>
                         <td style="text-align:center">
-                            Base IRRF<br />4.000,00
+                            Base IRRF<br />@Model.nr_valorIRRF
+                        </td>
+                    </tr> 
+                </table>
+            </td>
+        </tr>
+
+        <tr>
+            <td colspan="2">
+                <table style="width:100%">
+                    <tr>
+                        <td>
+                            Declaro ter recebido o valor líquido deste recibo.<br />
+                            &emsp;&emsp;/&emsp;&emsp;/&emsp;&emsp;&emsp;&emsp;
+                            
+                            Assinatura do funcionário:
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+
+    </table>
+
+    <table style="width:100%;border:1px solid black;padding:10px">
+        <tr>
+            <td>@Model.nomeEmpresa</td>
+            <td style="text-align:right">RECIBO DE PAGAMENTO DE SALÁRIO</td>
+        </tr>
+        <tr>
+            <td>CNPJ: @Model.cnpjEmpresa</td>
+            <td style="text-align:right">@Model.mesAnoReferencia</td>
+        </tr>
+
+        <tr style="border-top:1px solid black">
+            <td colspan="2">
+                <table style="width:100%">
+                    <tr>
+                        <td><b>Nome do Funcionário</b></td>
+                        <td><b>CBO</b></td> 
+                    </tr>
+                    <tr>
+                        <td>@Model.nomeFuncionario.ToUpper()</td>
+                        <td>@Model.codigoCBO</td>
+                    </tr>
+                    <tr>
+                        <td>@Model.tituloCBO</td>
+                        <td style="text-align:right">Admissão: @Model.dt_admissao</td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+
+        <tr>
+            <td colspan="2" style="padding: 0;padding-top: 5px">
+                <table style="width:100%;">
+                    <thead class="theadLancamentos">
+                        <tr> 
+                            <th style="border-left:0px!important">DESCRISÇÕES</th>
+                            <th style="text-align:center;">REFERÊNCIAS</th>
+                            <th style="text-align:center;">PROVENTOS</th>
+                            <th style="text-align:center;border-right:0px!important">DESCONTOS</th>
+                        </tr>
+                    </thead>
+                    <tbody class="tbodyLancamentos"> 
+                        @foreach (var item in Model.lancamentos)
+                        {
+                            <tr>
+                                <td>@item.descricao</td>
+                                <td>@item.referencia</td>
+                                <td>@item.provento</td>
+                                <td>@item.desconto</td>
+                            </tr>
+                        }
+
+                        
+                    </tbody>
+                    <tfoot class="tfootLancamento">
+                        <tr>
+                            <td colspan="2">&nbsp;</td>
+                            <td style="text-align:center">
+                                <b>TOTAL DE PROVENTOS</b><br />
+                                @Model.nr_totalProvento
+                            </td>
+                            <td style="text-align:center">
+                                <b>TOTAL DE DESCONTOS</b><br />
+                                @Model.nr_totalDesconto
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">&nbsp;</td>
+                            <td style="text-align:center;padding-top:15px;padding-bottom:15px;">
+                                <b>VALOR LÍQUIDO</b>
+                            </td>
+                            <td style="text-align:center">
+                                @Model.nr_salarioLiquido
+                            </td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </td>
+        </tr>
+
+        <tr style="border-bottom:1px solid black">
+            <td colspan="2">
+                <table style="width:100%">
+                    <tr>
+                        <td style="text-align:center">
+                            Salário Base<br />@Model.nr_salarioBase
+                        </td>
+                        <td style="text-align:center">
+                            Base INSS<br />@Model.nr_baseINSS
+                        </td>
+                        <td style="text-align:center">
+                            Base FGTS<br />@Model.nr_baseFGTS
+                        </td>
+                        <td style="text-align:center">
+                            Valor FGTS<br />@Model.nr_valorFGTS
+                        </td>
+                        <td style="text-align:center">
+                            Base IRRF<br />@Model.nr_valorIRRF
                         </td>
                     </tr> 
                 </table>
@@ -173,3 +289,8 @@
 </body>
 </html>
 
+<script>
+    window.onload = function () {
+        window.print();
+    };
+</script>

@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using PimFolhaPagamentoV2.Classes;
+using PimFolhaPagamentoV2.Classes; 
+using PimFolhaPagamentoV2.Models.Holerite;
 using System.Data.SqlClient;
+using System.Security.Cryptography.Xml;
 using System.Web.Helpers;
 
 namespace PimFolhaPagamentoV2.Controllers.Holerite
@@ -19,9 +21,85 @@ namespace PimFolhaPagamentoV2.Controllers.Holerite
             return View();
         }
 
-        public IActionResult Visualizar()
-        { 
-            return View();
+        public IActionResult Visualizar(string id)
+        {
+            try
+            {
+
+                HoleriteDados holerite = new HoleriteDados();
+                ResultadoBancoDados dadosBanco;
+
+                Conexao conexao = new Conexao();
+
+                conexao.AbrirConexao();
+                using (SqlCommand cmd = new SqlCommand())
+                {
+                    cmd.Connection = conexao.conn;
+                    cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                    cmd.CommandText = "SP_holerite";
+                    cmd.Parameters.Add("@vstr_tipoOper", System.Data.SqlDbType.VarChar).Value = "SEL";
+                    cmd.Parameters.Add("@vstr_acao", System.Data.SqlDbType.NVarChar).Value = "CARREGAR_HOLERITE_VISUALIZACAO";
+                    cmd.Parameters.Add("@id_holerite", System.Data.SqlDbType.VarChar).Value = Function.LimparString(id); 
+
+                    SqlDataReader rs = cmd.ExecuteReader();
+                    dadosBanco = RsToArray.CriarJSONDoDataReader(rs);
+                    rs.Close();
+                }
+
+
+                if (dadosBanco.erroSql)
+                {
+                    return BadRequest(dadosBanco.resultado[0][0]["SP_ERROR_MESSAGE"].ToString());
+                }
+                else
+                {
+                    if (dadosBanco.resultado.Count > 0)
+                    {
+                        var dadosHolerite = dadosBanco.resultado[0][0];
+                        var dadosTotaisHolerite = dadosBanco.resultado[1][0];
+                        var dadosLancamento = dadosBanco.resultado[2];
+
+
+                        holerite.nomeEmpresa = dadosHolerite["empresa"].ToString();
+                        holerite.cnpjEmpresa = dadosHolerite["cnpj"].ToString();
+                        holerite.mesAnoReferencia  = dadosHolerite["ds_referencia"].ToString();
+                        holerite.nomeFuncionario  = dadosHolerite["nomeFuncionario"].ToString();
+                        holerite.codigoCBO  = dadosHolerite["codigoCBO"].ToString();
+                        holerite.tituloCBO  = dadosHolerite["tituloCBO"].ToString();
+                        holerite.dt_admissao  = dadosHolerite["dt_admissao"].ToString();
+                        holerite.nr_salarioBase  = dadosHolerite["nr_salarioBruto"].ToString();
+                        holerite.nr_baseINSS  = dadosHolerite["nr_baseINSS"].ToString();
+                        holerite.nr_baseFGTS  = dadosHolerite["nr_baseFGTS"].ToString();
+                        holerite.nr_valorFGTS  = dadosHolerite["nr_valorFGTS"].ToString();
+                        holerite.nr_valorIRRF  = dadosHolerite["nr_baseIRRF"].ToString();
+                        holerite.nr_totalProvento  = dadosTotaisHolerite["nr_totalProvento"].ToString();
+                        holerite.nr_totalDesconto = dadosTotaisHolerite["nr_totalDesconto"].ToString();
+                        holerite.nr_salarioLiquido = dadosTotaisHolerite["nr_salarioLiquido"].ToString();
+
+                        foreach (var item in dadosLancamento) {
+                            HoleriteLancamentos holeriteLancamentos = new HoleriteLancamentos {
+                                descricao = item["descricao"].ToString(),
+                                referencia = item["nr_referencia"].ToString(),
+                                provento = item["provento"].ToString(),
+                                desconto = item["desconto"].ToString(),
+                            };
+
+                            holerite.lancamentos.Add(holeriteLancamentos);
+                        }
+
+                    }
+
+                }
+
+                conexao.FecharConexao();
+                 
+
+                return View(holerite);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
         public IActionResult Cadastro()
         {
