@@ -50,6 +50,7 @@ namespace PimFolhaPagamentoV2.Controllers.Cbo
                     cmd.Parameters.Add("@vstr_tipoOper", System.Data.SqlDbType.VarChar).Value = "INS";
                     cmd.Parameters.Add("@vstr_acao", System.Data.SqlDbType.NVarChar).Value = "GRAVAR_CBO";
 
+                    cmd.Parameters.Add("@id_cbo", System.Data.SqlDbType.VarChar).Value = Function.LimparString(dados["hdn_idCbo"].ToString()); 
                     cmd.Parameters.Add("@codigo", System.Data.SqlDbType.VarChar).Value = Function.LimparString(dados["txt_codigo"].ToString()); 
                     cmd.Parameters.Add("@titulo", System.Data.SqlDbType.VarChar).Value = Function.LimparString(dados["txt_titulo"].ToString()); 
                     cmd.Parameters.Add("@status_fl", System.Data.SqlDbType.VarChar).Value = Function.LimparString(dados["cmb_status"].ToString()); 

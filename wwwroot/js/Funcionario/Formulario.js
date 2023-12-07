@@ -1,6 +1,4 @@
-﻿
-const vstr_local = window.location.origin + '/Funcionario/';
-
+﻿const vstr_local = window.location.origin + '/Funcionario/';
 $(document).ready(function () { 
     $('#txt_cep').on('change', function () {
         fcn_buscarCEP($(this), fcn_preencheCep);
@@ -14,7 +12,7 @@ $(document).ready(function () {
         window.open(vstr_local + 'Consulta', '_self');
     });
 
-    if ($('#hdn_idEmpresa').val()) fcn_carregarCampos();
+    if ($('#hdn_idFuncionario').val()) fcn_carregarCampos();
     else fcn_removerLoading();
 });
 
@@ -36,7 +34,7 @@ function fcn_removerLoading() {
 
 function fcn_gravar() {
 
-    if (fcn_validaCampos('.container-formulario') || 1==1) {
+    if (fcn_validaCampos('.container-formulario')) {
         $('#btn_gravar').prop('disabled', true);
         fcn_confirmSN("Atenção", 'Deseja realmente continuar?').done(function () {
             $.ajax({
@@ -49,7 +47,7 @@ function fcn_gravar() {
                 if (data.message) fcn_alert("Atenção!", data.message);
 
                 if (data.success) {
-                    if ($('#hdn_idEmpresa').val()) fcn_carregarCampos();
+                    if ($('#hdn_idFuncionario').val()) fcn_carregarCampos();
                     else fcn_limparCampos('.container-formulario');
                 }
             }).always(function () {
@@ -68,7 +66,7 @@ function fcn_carregarCampos() {
 
     fcn_limparCampos('.container-formulario');
 
-    if ($('#hdn_idEmpresa').val()) {
+    if ($('#hdn_idFuncionario').val()) {
         $('.container-formulario').addClass('loading'); 
         $.ajax({
             type: "POST",
@@ -76,7 +74,7 @@ function fcn_carregarCampos() {
             url: vstr_local + 'CarregarCampos',
             cache: false,
             data: {
-                id_empresa: $('#hdn_idEmpresa').val()
+                id_funcionario: $('#hdn_idFuncionario').val()
             }
         }).done(function (data) {
             if (data.success) { 

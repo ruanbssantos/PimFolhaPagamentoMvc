@@ -43,7 +43,10 @@ namespace PimFolhaPagamentoV2.Classes
 
             //trata erros
             if (resultadoBanco.resultado.Count == 1) {
-                if (resultadoBanco.resultado[0][0].ContainsKey("SP_ERROR_MESSAGE") == true) resultadoBanco.erroSql = true;
+                if (resultadoBanco.resultado[0].Count == 1)
+                {
+                    if (resultadoBanco.resultado[0][0].ContainsKey("SP_ERROR_MESSAGE") == true) resultadoBanco.erroSql = true;
+                }
             }
 
             return resultadoBanco;

@@ -38,39 +38,47 @@ BEGIN
     BEGIN TRY
 		IF @vstr_tipoOper = 'SEL'
 		BEGIN
-			IF @vstr_acao = 'CARREGAR_EMPRESA'
+			IF @vstr_acao = 'CARREGAR_FUNCIONARIO'
 			BEGIN 
 				set @vstr_cmd = ' 
 					SELECT
-						ROW_NUMBER() OVER (ORDER BY razaoSocial ASC) AS nr_registro
-						,dbo.MascaraCPFCNPJ(cnpj) AS cnpj
-						,razaoSocial
-						,nomeFantasia
+						ROW_NUMBER() OVER (ORDER BY nome ASC) AS nr_registro
+						,dbo.MascaraCPFCNPJ(cpf) AS cpf
+						,nome
+						,email
 						,CASE
 							isnull(status_fl,0)
 							WHEN 1 THEN ''Ativo''
 							WHEN 0 THEN ''Inativo''
 						END ds_status	
+						,CASE
+							isnull(admin_fl,0)
+							WHEN 1 THEN ''Sim''
+							WHEN 0 THEN ''Não''
+						END ds_admin
 
-   						,id_empresa AS [id_empresa|PK]
+   						,id_funcionario AS [id_funcionario|PK]
 
 						INTO #TEMP_BUSCA
 					FROM
-						empresa
+						funcionario
 					WHERE
 						1=1'
+						
+				if LEN(@cpf) > 0
+					set @vstr_cmd += ' AND cpf like ''%' + CONVERT(varchar,@cpf) + '%'''
+
+				if LEN(@nome) > 0
+					set @vstr_cmd += ' AND nome like ''%' + CONVERT(varchar,@nome) + '%'''
+
+				if LEN(@email) > 0
+					set @vstr_cmd += ' AND email like ''%' + CONVERT(varchar,@email) + '%'''
 		
-				--if LEN(@status_fl) > 0
-				--	set @vstr_cmd += ' AND status_fl =' + CONVERT(varchar,@status_fl) 
+				if LEN(@status_fl) > 0
+					set @vstr_cmd += ' AND status_fl =' + CONVERT(varchar,@status_fl) 
 
-				--if LEN(@razaoSocial) > 0
-				--	set @vstr_cmd += ' AND razaoSocial like ''%' + CONVERT(varchar,@razaoSocial) + '%'''
-
-				--if LEN(@nomeFantasia) > 0
-				--	set @vstr_cmd += ' AND nomeFantasia like ''%' + CONVERT(varchar,@nomeFantasia) + '%'''
-				
-				--if LEN(@cnpj) > 0
-				--	set @vstr_cmd += ' AND cnpj like ''%' + CONVERT(varchar,@cnpj) + '%'''
+				if LEN(@admin_fl) > 0
+					set @vstr_cmd += ' AND admin_fl =' + CONVERT(varchar,@admin_fl) 
 
 				--GERA PAGINAÇÃO
    				set @vstr_cmd += '
@@ -90,17 +98,25 @@ BEGIN
 				execute (@vstr_cmd)
 			END
 
-			IF @vstr_acao = 'CARREGAR_CAMPOS_EMPRESA'
+			IF @vstr_acao = 'CARREGAR_CAMPOS_FUNCIONARIO'
 			BEGIN
 				SELECT
-					cnpj AS txt_cnpj
-					,nomeFantasia AS txt_nomeFantasia
-					,razaoSocial AS txt_razaoSocial
+					cpf AS txt_cpf
+					,nome AS txt_nome
+					,email AS txt_email
+					,cep as txt_cep
+					,logradouro as txt_endereco
+					,numeroLogradouro as txt_numeroResidencial
+					,estado as txt_uf
+					,cidade as txt_cidade
+					,bairro as txt_bairro
+					,complemento as txt_complemento
 					,CONVERT(tinyint,status_fl) AS cmb_status
+					,CONVERT(tinyint,admin_fl) AS cmb_admin
 				FROM
-					empresa
+					funcionario
 				WHERE
-					id_empresa = @id_funcionario
+					id_funcionario = @id_funcionario
 			END 
 		END
 
@@ -109,7 +125,7 @@ BEGIN
 			IF @vstr_acao = 'GRAVAR_FUNCIONARIO'
 			BEGIN 
 			 
-				IF EXISTS(SELECT 1 FROM funcionario WHERE cpf = @cpf) AND @id_funcionario IS NULL 
+				IF EXISTS(SELECT 1 FROM funcionario WHERE cpf = @cpf)
 					SET @id_funcionario = (SELECT id_funcionario FROM funcionario WHERE cpf = @cpf)		
 				
 				IF LEN(@id_funcionario) > 0
