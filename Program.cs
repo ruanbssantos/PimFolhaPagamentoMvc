@@ -31,15 +31,7 @@ namespace PimFolhaPagamentoV2
 
             app.MapControllerRoute(
                 name: "default",
-                pattern: "{controller=Home}/{action=Index}/{id?}");
-
-            // Armazenando o ID da sessão na sessão
-            app.Use(async (context, next) =>
-            {
-                context.Session.SetString("id_usuario", "1");
-                await next.Invoke();
-            });
-
+                pattern: "{controller=Login}/{action=Index}/{id?}");
 
             app.Run();
         }

@@ -39,6 +39,19 @@ BEGIN
     BEGIN TRY
 		IF @vstr_tipoOper = 'SEL'
 		BEGIN
+			IF @vstr_acao = 'LOGIN'
+			BEGIN
+				SELECT
+					id_funcionario
+					,UPPER(nome) AS nome
+				FROM
+					funcionario
+				WHERE
+					email = @email
+				AND cpf = @cpf
+				AND status_fl = 1
+			END
+
 			IF @vstr_acao = 'CARREGAR_FUNCIONARIO'
 			BEGIN 
 				set @vstr_cmd = ' 
