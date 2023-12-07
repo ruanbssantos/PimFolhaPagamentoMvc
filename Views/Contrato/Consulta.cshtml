@@ -1,0 +1,130 @@
+﻿<script src="~/js/Contrato/Consulta.js" asp-append-version="true"></script>
+
+<div class="container-fluid px-4 mt-4 mb-4">
+    <div class="row justify-content-between">
+        <div class="col-auto">
+            <div class="row h-100 no-gutters align-items-center">
+                <div class="col-12">
+                    <h3>@ViewData["Title"]</h3>
+                </div>
+            </div>
+        </div>
+        <div class="col-auto d-flex align-items-center">
+            <div class="row">
+                <div class="col-auto">
+                    <div class="btn-group">
+                        <button type="button" class="btn-acesso-rapido btn_novo" data-bs-custom-class="custom-tooltip" data-bs-toggle="tooltip" data-bs-placement="left" data-bs-title="Novo">
+                            <i class="fa-solid fa-plus"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container-fluid px-4" id="containerBody">
+    <div class="row">
+        <div class="col-12">
+            <form action="" method="post" id="frm_consulta" class="container-formulario shadow p-3 p-md-4">
+                <div class="row">
+                    <div class="col-12 mb-4">
+                        <div class="card">
+                            <div class="card-header text-white bg-dark-secundary">
+                                <label class="sub-titulo-form">Filtros</label>
+                            </div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-12 col-sm-12 col-lg-12 col-xl-6 col-xxl-6">
+                                        <div class="form-group">
+                                            <label for="txt_empresa">Empresa</label>
+                                            <input type="text" class="form-control field_autoBusca" name="txt_empresa" id="txt_empresa" data-field_type="Field_empresa" />
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-sm-12 col-lg-12 col-xl-6 col-xxl-6">
+                                        <div class="form-group">
+                                            <label for="txt_funcionario">Funcionário</label>
+                                            <input type="text" class="form-control field_autoBusca" name="txt_funcionario" id="txt_funcionario" data-field_type="field_funcionario" />
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-sm-12 col-lg-12 col-xl col-xxl">
+                                        <div class="form-group">
+                                            <label for="txt_cbo">CBO</label>
+                                            <input type="text" class="form-control field_autoBusca" name="txt_cbo" id="txt_cbo" data-field_type="field_cbo" />
+                                        </div>
+                                    </div> 
+                                    <div class="col-12 col-sm-12 col-lg-12 col-xl-auto col-xxl-auto">
+                                        <div class="form-group">
+                                            <label for="cmb_status">Status</label>
+                                            <select class="form-control" name="cmb_status" id="cmb_status">
+                                                <option value="">Selecione</option>
+                                                <option value="1">Ativo</option>
+                                                <option value="0">Inativo</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-12 my-4 text-center">
+                                        <input type="button" class="btn btn-success" name="btn_buscar" id="btn_buscar" value="Buscar" title="Buscar">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-header text-white bg-dark-secundary">
+                                <label class="sub-titulo-form">Resultado</label>
+                            </div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-12">
+                                        <div class="d-inline-flex align-items-center form-group">
+                                            <select class="form-select cmb_qtdPaginacao" name="cmb_qtdRegistro" id="cmb_qtdRegistro">
+                                                <option value="10">10</option>
+                                                <option value="25">25</option>
+                                                <option value="50">50</option>
+                                                <option value="100">100</option>
+                                            </select>
+                                            &nbsp;resultados por página
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-12">
+                                        <div class="table-responsive-xl" id="tb_busca">
+                                            <table class="table table-striped border-table">
+                                                <thead>
+                                                    <tr>
+                                                        <th>#</th>
+                                                        <th>Empresa</th>
+                                                        <th>Funcionário</th>
+                                                        <th>CBO</th>
+                                                        <th>Status</th> 
+                                                        <th></th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody></tbody>
+                                                <tfoot>
+                                                    <tr>
+                                                        <td colspan="100%">
+                                                            <div class="row align-items-center">
+                                                                <div class="col-6 menssagem text-align-left"></div>
+                                                                <div class="col-6 paginacao text-right"></div>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                </tfoot>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div> 

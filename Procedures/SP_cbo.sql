@@ -93,7 +93,12 @@ BEGIN
 			IF @vstr_acao = 'FIELD_CBO'
 			BEGIN 
 				set @vstr_cmd = ' 
-					SELECT 
+					SELECT'
+
+				if LEN(@top) > 0
+					set @vstr_cmd += ' TOP ' + CONVERT(varchar,@top)
+
+				set @vstr_cmd += ' 
 						id_cbo AS [id]
 						,codigo + '' - '' + titulo AS [label]
 					FROM
@@ -106,6 +111,10 @@ BEGIN
 
 				if LEN(@titulo) > 0
 					set @vstr_cmd += ' AND titulo like ''%' + CONVERT(varchar,@titulo) + '%'''
+				
+				set @vstr_cmd += ' 
+					ORDER BY 
+						[label]'
 
 				execute (@vstr_cmd)
 			END
@@ -153,8 +162,10 @@ BEGIN
 
     END TRY
     BEGIN CATCH 
-        -- Se ocorrer um erro 
-        ROLLBACK; 
+          -- Se ocorrer um erro 
+		SELECT ERROR_MESSAGE() AS SP_ERROR_MESSAGE;
+        RollBack; 
+		RETURN;
     END CATCH; 
 
     -- Se chegou até aqui, commit a transação

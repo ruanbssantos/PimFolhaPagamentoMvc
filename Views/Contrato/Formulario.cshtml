@@ -1,0 +1,108 @@
+﻿<script src="~/js/Contrato/Formulario.js" asp-append-version="true"></script>
+
+<div class="container-fluid px-4 mt-4 mb-4">
+    <div class="row justify-content-between">
+        <div class="col-auto">
+            <div class="row h-100 no-gutters align-items-center">
+                <div class="col-12">
+                    <h3>@ViewData["Title"]</h3>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container-fluid px-4" id="containerBody">
+    <div class="row">
+        <div class="col-12">
+            <div class="container-formulario shadow p-2 p-sm-3 p-md-4 loading">
+                <input type="hidden" class="notClear" id="hdn_idContrato" name="hdn_idContrato" value="@ViewBag.id" />
+
+                <div class="row">
+                    <div class="col-12 mb-4">
+                        <div class="card">
+                            <div class="card-header text-white bg-dark-secundary">
+                                <label class="sub-titulo-form">Dados</label>
+                            </div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-12 col-sm-12 col-lg-12 col-xl-6 col-xxl-6">
+                                        <div class="form-group">
+                                            <label for="txt_empresa">Empresa</label>
+                                            <input type="text" class="form-control obg field_autoBusca" name="txt_empresa" id="txt_empresa" data-field_type="Field_empresa" />
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-sm-12 col-lg-12 col-xl-6 col-xxl-6">
+                                        <div class="form-group">
+                                            <label for="txt_funcionario">Funcionário</label>
+                                            <input type="text" class="form-control obg field_autoBusca" name="txt_funcionario" id="txt_funcionario" data-field_type="field_funcionario" />
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-sm-12 col-lg-12 col-xl col-xxl">
+                                        <div class="form-group">
+                                            <label for="txt_cbo">CBO</label>
+                                            <input type="text" class="form-control obg field_autoBusca" name="txt_cbo" id="txt_cbo" data-field_type="field_cbo" />
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-sm-12 col-lg-12 col-xl-auto col-xxl-auto">
+                                        <div class="form-group">
+                                            <label for="txt_dtAdmissao">Admissão</label>
+                                            <input type="date" class="form-control obg" name="txt_dtAdmissao" id="txt_dtAdmissao" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-12 col-sm-12 col-lg-12 col-xl">
+                                        <div class="form-group">
+                                            <label for="txt_salarioBase">Salário base</label>
+                                            <input type="text" class="form-control maskMoeda" name="txt_salarioBase" id="txt_salarioBase" maxlength="12" />
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-sm-12 col-lg-12 col-xl">
+                                        <div class="form-group">
+                                            <label for="txt_baseINSS">Base INSS</label>
+                                            <input type="text" class="form-control maskMoeda" name="txt_baseINSS" id="txt_baseINSS" maxlength="12" />
+                                        </div>                                        
+                                    </div>
+                                    <div class="col-12 col-sm-12 col-lg-12 col-xl">
+                                        <div class="form-group">
+                                            <label for="txt_baseFGTS">Base FGTS</label>
+                                            <input type="text" class="form-control maskMoeda" name="txt_baseFGTS" id="txt_baseFGTS" maxlength="12" />
+                                        </div>                                        
+                                    </div>
+                                    <div class="col-12 col-sm-12 col-lg-12 col-xl">
+                                        <div class="form-group">
+                                            <label for="txt_valorFGTS">Valor FGTS</label>
+                                            <input type="text" class="form-control maskMoeda" name="txt_valorFGTS" id="txt_valorFGTS" maxlength="12" />
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-sm-12 col-lg-12 col-xl">
+                                        <div class="form-group">
+                                            <label for="txt_baseIRRF">Base IRRF</label>
+                                            <input type="text" class="form-control maskMoeda" name="txt_baseIRRF" id="txt_baseIRRF" maxlength="12" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row"> 
+                                    <div class="col-12">
+                                        <div class="form-group">
+                                            <label for="cmb_status">Status</label>
+                                            <select class="form-control obg" name="cmb_status" id="cmb_status">
+                                                <option value="">Selecione</option>
+                                                <option value="1">Ativo</option>
+                                                <option value="0">Inativo</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 my-3 text-center">
+                        <input type="button" class="btn btn-success" name="btn_gravar" id="btn_gravar" value="Gravar" title="Gravar" />
+                        <input type="button" class="btn btn-secondary" name="btn_voltar" id="btn_voltar" value="Voltar" title="Voltar" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

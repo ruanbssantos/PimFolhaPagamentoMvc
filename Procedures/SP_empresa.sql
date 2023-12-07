@@ -94,6 +94,31 @@ BEGIN
 				WHERE
 					id_empresa = @id_empresa
 			END 
+
+			IF @vstr_acao = 'FIELD_EMPRESA'
+			BEGIN 
+				set @vstr_cmd = ' 
+					SELECT 
+						id_empresa AS [id]
+						,isnull(nomeFantasia,razaoSocial)  + '' - '' + dbo.MascaraCPFCNPJ(cnpj) AS [label]
+					FROM
+						empresa
+					WHERE
+						status_fl = 1'
+		
+				if LEN(@cnpj) > 0
+					set @vstr_cmd += ' AND cnpj like ''%' + CONVERT(varchar,@cnpj) + '%'''
+
+				if LEN(@nomeFantasia) > 0
+					set @vstr_cmd += ' AND isnull(nomeFantasia,razaoSocial) like ''%' + CONVERT(varchar,@nomeFantasia) + '%'''
+
+				set @vstr_cmd += ' 
+					ORDER BY 
+						[label]'
+
+				execute (@vstr_cmd)
+			END
+
 		END
 
 		IF @vstr_tipoOper = 'INS'
@@ -143,7 +168,9 @@ BEGIN
     END TRY
     BEGIN CATCH 
         -- Se ocorrer um erro 
-        ROLLBACK; 
+		SELECT ERROR_MESSAGE() AS SP_ERROR_MESSAGE;
+        RollBack; 
+		RETURN;
     END CATCH; 
 
     -- Se chegou até aqui, commit a transação

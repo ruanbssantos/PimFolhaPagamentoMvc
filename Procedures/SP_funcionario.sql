@@ -118,6 +118,30 @@ BEGIN
 				WHERE
 					id_funcionario = @id_funcionario
 			END 
+
+			IF @vstr_acao = 'FIELD_FUNCIONARIO'
+			BEGIN 
+				set @vstr_cmd = ' 
+					SELECT 
+						id_funcionario AS [id]
+						,nome  + '' - '' + dbo.MascaraCPFCNPJ(cpf) AS [label]
+					FROM
+						funcionario
+					WHERE
+						status_fl = 1'
+		
+				if LEN(@cpf) > 0
+					set @vstr_cmd += ' AND cpf like ''%' + CONVERT(varchar,@cpf) + '%'''
+
+				if LEN(@nome) > 0
+					set @vstr_cmd += ' AND nome like ''%' + CONVERT(varchar,@nome) + '%'''
+
+				set @vstr_cmd += ' 
+					ORDER BY 
+						[label]'
+
+				execute (@vstr_cmd)
+			END
 		END
 
 		IF @vstr_tipoOper = 'INS'

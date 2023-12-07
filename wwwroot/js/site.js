@@ -611,7 +611,10 @@ function fcn_fieldAutoBusca_gera(p_seletorAlvo) {
                                 ,id_perfilIn: {cmd: '$('tbody').find('tr').map(function(){return $(this).id}).get().join()'} --PARAMETRO ATRIBUIDO POR CMD
                             })
                     */
-                    var dados = new Object();
+                    var dados = {
+                        ds_busca: ''
+                    };
+
                     if (request.term != '') dados['ds_busca'] = request.term;
                     $.each($('#' + vstr_idCampo).data('parametros'), function (campo, value) {
 
@@ -625,9 +628,9 @@ function fcn_fieldAutoBusca_gera(p_seletorAlvo) {
                         if (pstr_value != '' && pstr_value != undefined && pstr_value != null) dados[campo] = pstr_value
                     });
                      
-                    $.ajax({
+                    $.ajax({ 
                         type: "POST",
-                        datatype: "json",
+                        datatype: "application/json",
                         url: window.location.origin + '/AutoBusca/' + $("#" + vstr_idCampo).data('field_type'),
                         cache: false,
                         data: dados
@@ -644,7 +647,6 @@ function fcn_fieldAutoBusca_gera(p_seletorAlvo) {
                         response(dados_retorno);
                     }).fail(function () {
                         $('#' + vstr_idCampo).removeClass('ui-autocomplete-loading');
-                        fcn_alert('Atenção!', 'Desculpe-nos, mas ocorreu um erro inesperado. Por favor, tente atualizar a página e, caso o problema persista, entre em contato com o administrador do sistema.');
                     });
                 },
                 select: function (event, ui) {
@@ -676,22 +678,22 @@ function fcn_fieldAutoBusca_gera(p_seletorAlvo) {
                     $('#' + vstr_idCampo).trigger('change').trigger('val-change');
                 }
             })
-                .data("ui-autocomplete")._renderMenu = function (ul, items) {
-                    //PARA DISABILITAR UMA OPÇÃO BASTA COLOCAR UM CASE COM NOME DISABLED com valor;
-                    /*EX:
-                        CASE
-                            WHEN FL_STATUS = 1 THEN 1
-                        END DISABLED
-                        */
-                    var that = this;
-                    $.each(items, function (index, item) {
-                        that._renderItemData(ul, item);
-                    });
-                    $(ul).find('li').filter(function () {
-                        if ($(this).data('uiAutocompleteItem').disabled == true) return this
-                    }).addClass('ui-state-disabled')
-                    //.css('color','darkred');
-                };
+            .data("ui-autocomplete")._renderMenu = function (ul, items) {
+                //PARA DISABILITAR UMA OPÇÃO BASTA COLOCAR UM CASE COM NOME DISABLED com valor;
+                /*EX:
+                    CASE
+                        WHEN FL_STATUS = 1 THEN 1
+                    END DISABLED
+                    */
+                var that = this;
+                $.each(items, function (index, item) {
+                    that._renderItemData(ul, item);
+                });
+                $(ul).find('li').filter(function () {
+                    if ($(this).data('uiAutocompleteItem').disabled == true) return this
+                }).addClass('ui-state-disabled')
+                //.css('color','darkred');
+            };
 
 
             var fcn_removeDados = function () {
